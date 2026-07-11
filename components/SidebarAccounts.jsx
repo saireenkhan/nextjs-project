@@ -5,6 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
+  HeartHandshake,
+  Receipt,
+  Landmark,
+  Wallet,
+  FileBarChart2,
   Menu,
   X,
   ChevronDown,
@@ -22,35 +27,35 @@ export default function SidebarAccounts() {
   const [isSupportDropdownOpen, setIsSupportDropdownOpen] = useState(false);
 
   const navLinks = [
-  { 
-    href: "/AccountsPanel/DashboardAccounts", 
-    label: "Dashboard", 
-    icon: <Home size={18} /> 
+  {
+    href: "/AccountsPanel/DashboardAccounts",
+    label: "Dashboard",
+    icon: <Home size={18} />,
   },
-    { 
-    href: "/AccountsPanel/Donations", 
-    label: "Donation", 
-    icon: <Home size={18} /> 
+  {
+    href: "/AccountsPanel/Donations",
+    label: "Donation",
+    icon: <HeartHandshake size={18} />,
   },
-      { 
-    href: "/AccountsPanel/ExpensesAcc", 
-    label: "Expenses", 
-    icon: <Home size={18} /> 
+  {
+    href: "/AccountsPanel/ExpensesAcc",
+    label: "Expenses",
+    icon: <Receipt size={18} />,
   },
-        { 
-    href: "/AccountsPanel/FundsAcc", 
-    label: "Funds", 
-    icon: <Home size={18} /> 
+  {
+    href: "/AccountsPanel/FundsAcc",
+    label: "Funds",
+    icon: <Landmark size={18} />,
   },
-          { 
-    href: "/AccountsPanel/BankCashAcc", 
-    label: "Bash & CashBook", 
-    icon: <Home size={18} /> 
+  {
+    href: "/AccountsPanel/BankCashAcc",
+    label: "Bank & CashBook",
+    icon: <Wallet size={18} />,
   },
-            { 
-    href: "/AccountsPanel/ReportsAcc", 
-    label: "Reports", 
-    icon: <Home size={18} /> 
+  {
+    href: "/AccountsPanel/ReportsAcc",
+    label: "Reports",
+    icon: <FileBarChart2 size={18} />,
   },
 ];
 

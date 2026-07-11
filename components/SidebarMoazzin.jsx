@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
+  Star,
+  MessageSquareWarning,
   Menu,
   X,
   ChevronDown,
@@ -22,22 +24,22 @@ export default function SidebarMoazzin() {
   const [isSupportDropdownOpen, setIsSupportDropdownOpen] = useState(false);
 
   const navLinks = [
-  { 
-    href: "/MoazzinPanel/DashboardMoazzinPanel", 
-    label: "Dashboard", 
-    icon: <Home size={18} /> 
+  {
+    href: "/MoazzinPanel/DashboardMoazzinPanel",
+    label: "Dashboard",
+    icon: <Home size={18} />,
   },
-  { 
-    href: "/MoazzinPanel/RattingsMoz", 
-    label: "Rattings", 
-    icon: <Home size={18} /> 
-  },{
-      href: "/MoazzinPanel/ComplainMoz", 
-    label: "Complains", 
-    icon: <Home size={18} /> 
+  {
+    href: "/MoazzinPanel/RattingsMoz",
+    label: "Ratings",
+    icon: <Star size={18} />,
+  },
+  {
+    href: "/MoazzinPanel/ComplainMoz",
+    label: "Complaints",
+    icon: <MessageSquareWarning size={18} />,
   },
 ];
-
   useEffect(() => {
     const checkScreenSize = () => {
       const mobile = window.innerWidth <= 1024;

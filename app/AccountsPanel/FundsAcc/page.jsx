@@ -28,7 +28,6 @@ const FundsAcc = () => {
         <div className="page-container">
           <PageHeader
             title="Fund Management"
-            subtitle="Separate ledgers for all masjid funds and balances."
           />
 
           <div className="donation-info-box">

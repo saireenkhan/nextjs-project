@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
+  FileBarChart2,
   Menu,
   X,
   ChevronDown,
@@ -22,18 +23,17 @@ export default function SidebarViewer() {
   const [isSupportDropdownOpen, setIsSupportDropdownOpen] = useState(false);
 
   const navLinks = [
-  { 
-    href: "/ViewerPanel/DashboardViewer", 
-    label: "Dashboard", 
-    icon: <Home size={18} /> 
+  {
+    href: "/ViewerPanel/DashboardViewer",
+    label: "Dashboard",
+    icon: <Home size={18} />,
   },
-   { 
-    href: "/ViewerPanel/Reportss3", 
-    label: "Reports", 
-    icon: <Home size={18} /> 
+  {
+    href: "/ViewerPanel/Reportss3",
+    label: "Reports",
+    icon: <FileBarChart2 size={18} />,
   },
 ];
-
   useEffect(() => {
     const checkScreenSize = () => {
       const mobile = window.innerWidth <= 1024;

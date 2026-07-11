@@ -28,7 +28,6 @@ const ExpensesAcc = () => {
         <div className="page-container">
           <PageHeader
             title="Expense Management"
-            subtitle="Track daily and monthly expenses with approval workflow."
           />
 
           <div className="donation-info-box">

@@ -28,7 +28,6 @@ const ReportsAcc = () => {
         <div className="page-container">
           <PageHeader
             title="Reports & Statements"
-            subtitle="Monthly/yearly income-expense reports with PDF and Excel export."
           />
 
           <div className="donation-info-box">

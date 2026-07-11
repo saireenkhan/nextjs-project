@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
+  BookOpen,
+  Star,
   Menu,
   X,
   ChevronDown,
@@ -21,21 +23,21 @@ export default function SidebarImam() {
   // Support dropdown state
   const [isSupportDropdownOpen, setIsSupportDropdownOpen] = useState(false);
 
-  const navLinks = [
-  { 
-    href: "/ImamPanel/DashboardImam", 
-    label: "Dashboard", 
-    icon: <Home size={18} /> 
+ const navLinks = [
+  {
+    href: "/ImamPanel/DashboardImam",
+    label: "Dashboard",
+    icon: <Home size={18} />,
   },
-   { 
-    href: "/ImamPanel/AssignedTopics", 
-    label: "AssignedTopics", 
-    icon: <Home size={18} /> 
+  {
+    href: "/ImamPanel/AssignedTopics",
+    label: "Assigned Topics",
+    icon: <BookOpen size={18} />,
   },
-     { 
-    href: "/ImamPanel/RattingImam", 
-    label: "Rattings", 
-    icon: <Home size={18} /> 
+  {
+    href: "/ImamPanel/RattingImam",
+    label: "Ratings",
+    icon: <Star size={18} />,
   },
 ];
 

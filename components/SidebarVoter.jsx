@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
+  Vote,
   Menu,
   X,
   ChevronDown,
@@ -21,19 +22,18 @@ export default function SidebarVoter() {
   // Support dropdown state
   const [isSupportDropdownOpen, setIsSupportDropdownOpen] = useState(false);
 
-  const navLinks = [
-  { 
-    href: "/VoterPanel/DashboardVoter", 
-    label: "Dashboard", 
-    icon: <Home size={18} /> 
+const navLinks = [
+  {
+    href: "/VoterPanel/DashboardVoter",
+    label: "Dashboard",
+    icon: <Home size={18} />,
   },
-   { 
-    href: "/VoterPanel/CastVote2", 
-    label: "Cast Vote", 
-    icon: <Home size={18} /> 
+  {
+    href: "/VoterPanel/CastVote2",
+    label: "Cast Vote",
+    icon: <Vote size={18} />,
   },
 ];
-
   useEffect(() => {
     const checkScreenSize = () => {
       const mobile = window.innerWidth <= 1024;

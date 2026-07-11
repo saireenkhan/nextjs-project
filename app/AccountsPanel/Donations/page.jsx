@@ -28,7 +28,6 @@ const Donations = () => {
         <div className="page-container">
           <PageHeader
             title="Donation Management"
-            subtitle="Record cash, online and cheque donations with category-wise tracking."
           />
 
           <div className="donation-info-box">

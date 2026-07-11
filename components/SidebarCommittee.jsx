@@ -5,6 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
+  Users,
+  Vote,
+  UserCheck,
+  CheckSquare,
+  MessageSquareWarning,
+  FileBarChart2,
   Menu,
   X,
   ChevronDown,
@@ -22,40 +28,40 @@ export default function SidebarCommittee() {
   const [isSupportDropdownOpen, setIsSupportDropdownOpen] = useState(false);
 
   const navLinks = [
-  { 
-    href: "/CommittePanel/DashboardCommittee", 
-    label: "Dashboard", 
-    icon: <Home size={18} /> 
+  {
+    href: "/CommittePanel/DashboardCommittee",
+    label: "Dashboard",
+    icon: <Home size={18} />,
   },
-   { 
-    href: "/CommittePanel/Voter2", 
-    label: "Voters", 
-    icon: <Home size={18} /> 
+  {
+    href: "/CommittePanel/Voter2",
+    label: "Voters",
+    icon: <Users size={18} />,
   },
-     { 
-    href: "/CommittePanel/Election2", 
-    label: "Election", 
-    icon: <Home size={18} /> 
+  {
+    href: "/CommittePanel/Election2",
+    label: "Election",
+    icon: <Vote size={18} />,
   },
-       { 
-    href: "/CommittePanel/Candidate2", 
-    label: "Candidate", 
-    icon: <Home size={18} /> 
+  {
+    href: "/CommittePanel/Candidate2",
+    label: "Candidate",
+    icon: <UserCheck size={18} />,
   },
-        { 
-    href: "/CommittePanel/CastVote", 
-    label: "Cast vote", 
-    icon: <Home size={18} /> 
+  {
+    href: "/CommittePanel/CastVote",
+    label: "Cast Vote",
+    icon: <CheckSquare size={18} />,
   },
-         { 
-    href: "/CommittePanel/Complaints", 
-    label: "Complaints", 
-    icon: <Home size={18} /> 
+  {
+    href: "/CommittePanel/Complaints",
+    label: "Complaints",
+    icon: <MessageSquareWarning size={18} />,
   },
-          { 
-    href: "/CommittePanel/Reportss2", 
-    label: "Reports", 
-    icon: <Home size={18} /> 
+  {
+    href: "/CommittePanel/Reportss2",
+    label: "Reports",
+    icon: <FileBarChart2 size={18} />,
   },
 ];
 

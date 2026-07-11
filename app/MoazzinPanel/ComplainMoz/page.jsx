@@ -28,7 +28,6 @@ const ComplainMoz= () => {
         <div className="page-container">
           <PageHeader
             title="Complaint System"
-            subtitle="Submit complaints and requests directly to Admin or Committee."
           />
 
           <div className="donation-info-box">

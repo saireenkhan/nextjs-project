@@ -28,7 +28,6 @@ const RatingsMoz = () => {
         <div className="page-container">
           <PageHeader
             title="Masjid Star Rating System"
-            subtitle="Muqtadis can rate Imam, Moazzin and Committee Members from 1 to 5 stars."
           />
 
           <div className="donation-info-box">
