@@ -1,5 +1,5 @@
 .header {
-   position:fixed ;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,18 +26,20 @@
   width: 100%;
 }
 
+/* Fixed: Changed left offset from fluid 4vw to precise absolute placement */
 .search-icon-svg {
   position: absolute;
-  left: 4vw;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   color: #a0aec0;
   pointer-events: none;
 }
 
+/* Fixed: Replaced margin-left with internal padding-left to balance the icon area smoothly */
 .search-container input {
   width: 100%;
-  padding: 8px 15px 8px 40px;
+  padding: 8px 15px 8px 38px;
   border-radius: 6px;
   background-color: white;
   border: 1px solid #e2e8f0;
@@ -45,7 +47,6 @@
   font-size: 14px;
   outline: none;
   box-sizing: border-box;
-  margin-left: 3vw;
 }
 
 .header-right {
@@ -59,6 +60,10 @@
   align-items: center;
   gap: 12px;
   color: #4a5568;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .divider {
@@ -80,6 +85,7 @@
   height: 36px;
   border-radius: 50%;
   border: 1px solid #e2e8f0;
+  object-fit: cover;
 }
 
 .profile-name {
@@ -107,6 +113,7 @@
   border: 1px solid #e2e8f0;
   width: 180px;
   overflow: hidden;
+  z-index: 1000;
 }
 
 .dropdown div {
@@ -132,12 +139,19 @@
 }
 
 @media (max-width: 1024px) {
-  .search-wrapper { max-width: 280px;
-  margin-left: 10vw; }
+  .search-wrapper { 
+    max-width: 280px; 
+  }
 }
 
 @media (max-width: 767px) {
-  .header { padding: 0 15px 0 60px; }
-  .search-wrapper { max-width: 160px; }
-  .profile-name { display: none; }
+  .header { 
+    padding: 0 15px 0 60px; 
+  }
+  .search-wrapper { 
+    max-width: 160px; 
+  }
+  .profile-name { 
+    display: none; 
+  }
 }

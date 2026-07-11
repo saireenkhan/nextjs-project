@@ -6,29 +6,19 @@ html, body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  background-color: #ffffff; /* Forces the whole page background to be white */
-  overflow-x: hidden;        /* Prevents unwanted horizontal scrolling layout bugs */
-}
-
-#root {
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+  background-color: #f4f7f6; /* Soft cool grey/green tinted bg */
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
 }
 
 .edu-page-container {
   width: 100%;
   min-height: 100vh;
-  margin: 0;
-  padding: 40px 10%;         /* Safe internal margins */
-  background-color: #ffffff;
+  padding: 30px 5%;
+  background-color: #efffea;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;    /* Crucial so padding doesn't cause overflow width */
-  flex-grow: 1;              /* Allows container to expand dynamically with content */
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
@@ -37,70 +27,77 @@ html, body {
 .edu-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 60px;
+  align-items: center;
+  margin-bottom: 40px;
+  width: 100%;
 }
 
 .edu-brand {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;   /* Forces everything to align strictly to the left */
-  justify-content: center;
-  width: 100%;               /* Spans full horizontal width to allow clean left placement */
 }
 
-.edu-brand img {
-  height: 100px;              /* Explicitly scales down the logo to a clean size */
-  width: auto;               /* Keeps the original aspect ratio completely intact */
-  object-fit: contain;       /* Ensures crisp scaling bounds inside the asset file layout */
+.app-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f766e; /* Deep Teal */
+  letter-spacing: -0.5px;
 }
 
 .tagline {
-  color: #666;
-  font-size: 12px;
-  margin-top: 5px;
-  text-align: left;
-  font-weight: 600;
+  color: #667085;
+  font-size: 13px;
+  margin-top: 2px;
+  font-weight: 500;
 }
 
 /* ==========================================================================
    3. Navigation Dropdown
    ========================================================================== */
 .admin-dropdown {
-  position: relative;        /* Necessary context anchor for absolute menu positioning */
+  position: relative;
 }
 
-.admin-dropdown .dropdown-btn,
 .dropdown-btn {
   background: white;
-  border: 1px solid #e0e0e0;
-  padding: 8px 16px;
+  border: 1px solid #d0d5dd;
+  padding: 10px 16px;
   border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
   font-size: 14px;
-  color: #333;
+  font-weight: 600;
+  color: #344054;
   min-width: 180px;
-  transition: background 0.2s;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+  transition: all 0.2s ease;
 }
 
 .dropdown-btn:hover {
-  background: #f9f9f9;
+  background: #f9fafb;
+  border-color: #0d9488;
+}
+
+.user-icon {
+  display: inline-flex;
+  align-items: center;
+  color: #0d9488;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: 110%;
+  top: 115%;
   right: 0;
   background: white;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e4e7ec;
   border-radius: 8px;
   list-style: none;
-  padding: 8px 0;
+  padding: 6px 0;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   z-index: 100;
 }
 
@@ -108,24 +105,24 @@ html, body {
   padding: 10px 16px;
   font-size: 14px;
   cursor: pointer;
-  color: #555;
-  transition: background 0.2s;
+  color: #475467;
+  transition: all 0.2s;
 }
 
 .dropdown-menu li:hover {
-  background-color: #f0f7ff;
-  color: #4A90E2;
+  background-color: #f0fdfa; /* Ultra light teal */
+  color: #0f766e;
 }
 
 .dropdown-menu li.active {
-  background-color: #eef5ff;
-  color: #4A90E2;
+  background-color: #ccfbf1;
+  color: #0f766e;
   font-weight: 600;
 }
 
 .arrow {
+  margin-left: auto;
   transition: transform 0.2s;
-  display: inline-block;
 }
 
 .arrow.up {
@@ -133,162 +130,182 @@ html, body {
 }
 
 /* ==========================================================================
-   4. Columns Structure & Illustration Control
+   4. Centered Card Structure
    ========================================================================== */
 .edu-main-content {
   display: flex;
   align-items: center;
-  gap: 100px;
-  flex-grow: 1;              /* Allows vertical room adjustments dynamically */
-  width: 100%;
-}
-
-.login-column {
-  flex: 1;
-  max-width: 450px;
-}
-
-.illustration-column {
-  flex: 1.2;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
-  max-height: 80vh;          /* Caps container to prevent infinite scrolling overflows */
+  flex-grow: 1;
+  width: 100%;
+  padding-bottom: 60px; /* Balances viewport visual center */
 }
 
-.main-illustration {
+.login-card {
+  background: #ffffff;
   width: 100%;
-  max-width: 550px;
-  height: auto;
-  max-height: 100%;          /* Forces image to scale responsibly within viewport bounds */
-  object-fit: contain;
-  display: block;
-  margin-left: auto;         /* Anchors the asset cleanly on the right half column */
+  max-width: 440px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(13, 148, 136, 0.08);
 }
 
 /* ==========================================================================
    5. Interactive Form Elements
    ========================================================================== */
 .login-intro h2 {
-  font-size: 32px;
-  color: #1a1a1a;
-  margin-bottom: 8px;
-  text-align: left;
+  font-size: 24px;
+  color: #23371f;
+  margin: 0 0 8px 0;
+  font-weight: 700;
 }
 
 .login-intro p {
-  color: #777;
-  margin-bottom: 30px;
-  text-align: left;
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0 0 28px 0;
 }
 
 .edu-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
 .edu-input {
-  width: 100%;               /* Spans field layout boundaries flawlessly across container */
-  padding: 14px 16px;
-  border: 1px solid #f0f0f0;
-  background-color: #ffffff !important; /* Overrides default browser gray autofill backgrounds */
-  border-radius: 4px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   font-size: 14px;
-  color: #333;
+  color: #1f2937;
   box-sizing: border-box;
+  transition: all 0.2s ease;
+  background-color: #ffffff !important;
+}
+
+.edu-input:focus {
+  outline: none;
+  border-color: #0d9488;
+  box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
 }
 
 .edu-input::placeholder {
-  color: #ccc;
+  color: #9ca3af;
 }
 
 .form-aux {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 12px;
-  margin-top: 5px;
+  font-size: 13px;
 }
 
 .remember-me {
-  color: #333;
-  font-weight: 600;
+  color: #4b5563;
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
 }
 
+.remember-me input[type="checkbox"] {
+  accent-color: #0d9488;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
 .forgot-link {
-  color: #4A90E2;
+  color: #0d9488;
   text-decoration: none;
   font-weight: 600;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+  color: #0f766e;
 }
 
 /* ==========================================================================
    6. Captcha Security Panel
    ========================================================================== */
 .captcha-container {
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #f8fafc;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
 }
 
 .captcha-box {
-  background-color: #eef5ff;
-  height: 50px;
-  width: 120px;
+  background-color: #cefbcc;
+  height: 44px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 15px;
-  border-radius: 4px;
-  position: relative;
-  overflow: hidden;
+  border-radius: 6px;
+  user-select: none;
 }
 
 .captcha-code {
-  font-size: 20px;
-  color: #4A90E2;
-  font-weight: bold;
-  letter-spacing: 2px;
+  font-size: 22px;
+  color: #0f766e;
+  font-weight: 800;
+  letter-spacing: 4px;
   text-decoration: line-through;
+  font-style: italic;
 }
 
-.login-btn {
-  background-color: #111;
-  color: white;
-  padding: 16px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 15px;
-  transition: opacity 0.2s;
-}
-
-.login-btn:hover {
-  opacity: 0.9;
+.captcha-input {
+  text-align: center;
+  letter-spacing: 1px;
 }
 
 /* ==========================================================================
-   7. Responsive Mobile Adaptations
+   7. Buttons & Actions
    ========================================================================== */
-@media (max-width: 1024px) {
-  .edu-page-container { 
-    padding: 30px 5%; 
-    min-height: auto;
+.login-btn {
+  background-color: #008f58; /* Primary Teal */
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.login-btn:hover {
+  background-color: #0f7657;
+}
+
+/* ==========================================================================
+   8. Responsive Mobile Adaptations
+   ========================================================================== */
+@media (max-width: 640px) {
+  .edu-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 30px;
   }
-  .edu-main-content { 
-    flex-direction: column;  /* Stack view instead of squeezing sides */
-    gap: 40px;
-    justify-content: center; 
+  
+  .admin-dropdown {
+    width: 100%;
   }
-  .illustration-column { 
-    display: none;           /* Hides heavy background illustration on mobile devices completely */
+
+  .dropdown-btn {
+    width: 100%;
   }
-  .login-column {
-    max-width: 100%;         /* Allows form to dynamically take full width on phone layouts */
+
+  .login-card {
+    padding: 24px 20px;
   }
 }

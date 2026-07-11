@@ -5,16 +5,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
-  Calculator,
-  Users,
-  Receipt,
   Menu,
   X,
   ChevronDown,
   ChevronUp,
-  LifeBuoy,
-  MessageSquare,
-  Shield,
+  Wallet,
+  Receipt,
+  Landmark,
+  Users,
+  CalendarDays,
+  UserCog,
+  FileText,
+  Vote,
+  UserCheck,
+  Star,
+  MessageSquareWarning,
+  ShieldCheck,
+  ClipboardList,
+  Banknote,
 } from "lucide-react";
 import "../app/css/Sidebar.css";
 
@@ -28,40 +36,82 @@ export default function Sidebar() {
   const [isSupportDropdownOpen, setIsSupportDropdownOpen] = useState(false);
 
   const navLinks = [
-    { href: "/Dashboard", label: "Dashboard", icon: <Home size={18} /> },
-    {
-      href: "/QuotationTool",
-      label: "Quotation Tool",
-      icon: <Calculator size={18} />,
-    },
-    {
-      label: "Support Center",
-      icon: <LifeBuoy size={18} />,
-      isDropdown: true,
-      subItems: [
-        {
-          href: "/SupportPortal",
-          label: "Support Portal",
-          icon: <Shield size={16} />,
-        },
-        {
-          href: "/SupportResponsePortal",
-          label: "Response Portal",
-          icon: <MessageSquare size={16} />,
-        },
-      ],
-    },
-    {
-      href: "/KnowledgeCenter",
-      label: "Knowledge Center",
-      icon: <Users size={18} />,
-    },
-    {
-      href: "/CRM",
-      label: "CRM & ERP Integrations",
-      icon: <Receipt size={18} />,
-    },
-  ];
+  { 
+    href: "/AdminPanel/Dashboard", 
+    label: "Dashboard", 
+    icon: <Home size={18} /> 
+  },
+  {
+    href: "/AdminPanel/DonationManagement",
+    label: "Donation Management",
+    icon: <Wallet size={18} />,
+  },
+  {
+    href: "/AdminPanel/Expenses",
+    label: "Expenses",
+    icon: <Receipt size={18} />,
+  },
+  {
+    href: "/AdminPanel/Funds",
+    label: "Funds",
+    icon: <Banknote size={18} />,
+  },
+  {
+    href: "/AdminPanel/StaffProfile",
+    label: "Staff Profile & salary",
+    icon: <Users size={18} />,
+  },
+  {
+    href: "/AdminPanel/EventsKhateeb",
+    label: "Events Khateeb Qari",
+    icon: <CalendarDays size={18} />,
+  },
+  {
+    href: "/AdminPanel/BankCash",
+    label: "Bank & Cash Book",
+    icon: <Landmark size={18} />,
+  },
+  {
+    href: "/AdminPanel/Reportss",
+    label: "Reports & Statements",
+    icon: <FileText size={18} />,
+  },
+  {
+    href: "/AdminPanel/Voters",
+    label: "Voter Management",
+    icon: <Vote size={18} />,
+  },
+  {
+    href: "/AdminPanel/Elections",
+    label: "Elections",
+    icon: <ClipboardList size={18} />,
+  },
+  {
+    href: "/AdminPanel/Candidates",
+    label: "Candidate",
+    icon: <UserCheck size={18} />,
+  },
+  {
+    href: "/AdminPanel/Rattings",
+    label: "Rattings",
+    icon: <Star size={18} />,
+  },
+  {
+    href: "/AdminPanel/Complains",
+    label: "Complaints",
+    icon: <MessageSquareWarning size={18} />,
+  },
+  {
+    href: "/AdminPanel/UsersRules",
+    label: "Users & Roles",
+    icon: <UserCog size={18} />,
+  },
+  {
+    href: "/AdminPanel/Audit",
+    label: "Audit & Security",
+    icon: <ShieldCheck size={18} />,
+  },
+];
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -162,8 +212,8 @@ useEffect(() => {
           {isSidebarOpen && (
             <div className="brand-container">
               <div>
-                <h2 className="brand-text">Power Core Energy</h2>
-                <p className="user-info">Installer Portal</p>
+                <h2 className="brand-text">Hisab-ul-Khair</h2>
+                <p className="user-info">Admin Panel</p>
               </div>
             </div>
           )}
