@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FileText } from "lucide-react";
+import { FileText , Search } from "lucide-react";
 
 import Sidebar2 from "@/components/Sidebar";
 import Header from "@/components/Header";
@@ -14,7 +14,7 @@ import { StaffFormSchema, StaffData } from "@/Data/Data";
 
 import "../../css/Pages.css";
 
-const StaffProfile= () => {
+const StaffProfile = () => {
   return (
     <div className="campus-layout">
       <Sidebar2 />
@@ -35,16 +35,23 @@ const StaffProfile= () => {
           <div className="donation-form-card">
             <AddClassForm fields={StaffFormSchema} />
           </div>
-
+          <div className="filters-row">
+            <div className="search-box" style={{ position: 'relative' }}>
+              <Search size={18} style={{ position: 'absolute', left: '14px', top: '12px', color: '#555' }} />
+              <input type="text" placeholder="Search resources..." style={{ paddingLeft: '40px' }} />
+            </div>
+            <select className="filter-select"><option>Staff Id</option></select>
+            <select className="filter-select"><option>Staff Name</option></select>
+          </div>
           <DataTable
             headers={[
-"Staff ID",
-  "Staff Name",
-  "Role",
-  "Current Salary",
-  "Ramadan Bonus",
-  "Salary Status",
-  "Status"
+              "Staff ID",
+              "Staff Name",
+              "Role",
+              "Current Salary",
+              "Ramadan Bonus",
+              "Salary Status",
+              "Status"
             ]}
           >
             {StaffData.map((item) => (
@@ -58,7 +65,7 @@ const StaffProfile= () => {
                 <td>{item.role}</td>
 
                 <td>{item.currentSalary}</td>
-                   <td>{item.bonus}</td>
+                <td>{item.bonus}</td>
                 <td>
                   <span
                     style={{
@@ -68,14 +75,14 @@ const StaffProfile= () => {
                         item.status === "Verified"
                           ? "#dcfce7"
                           : item.status === "Pending"
-                          ? "#fef3c7"
-                          : "#e5e7eb",
+                            ? "#fef3c7"
+                            : "#e5e7eb",
                       color:
                         item.status === "Verified"
                           ? "#166534"
                           : item.status === "Pending"
-                          ? "#92400e"
-                          : "#374151",
+                            ? "#92400e"
+                            : "#374151",
                       fontSize: "12px",
                       fontWeight: "600",
                     }}

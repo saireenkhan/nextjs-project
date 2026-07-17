@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FileText } from "lucide-react";
+import { FileText,Search } from "lucide-react";
 
 import Sidebar2 from "@/components/Sidebar";
 import Header from "@/components/Header";
@@ -35,10 +35,17 @@ const Funds= () => {
           <div className="donation-form-card">
             <AddClassForm fields={FundsFormSchema} />
           </div>
-
+          <div className="filters-row">
+            <div className="search-box" style={{ position: 'relative' }}>
+              <Search size={18} style={{ position: 'absolute', left: '14px', top: '12px', color: '#555' }} />
+              <input type="text" placeholder="Search resources..." style={{ paddingLeft: '40px' }} />
+            </div>
+            <select className="filter-select"><option>Fund Code</option></select>
+            <select className="filter-select"><option>Ledger Category</option></select>
+          </div>
           <DataTable
             headers={[
-"Fund Code"," Fund Name", "Opening Balance", "Current Balance"," Ledger Type"," Status",
+"Fund Code"," Fund Name", "Opening Balance", "Current Balance"," Ledger Type"," Status","Action"
             ]}
           >
             {FundsData.map((item) => (

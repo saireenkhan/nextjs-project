@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FileText } from "lucide-react";
+import { FileText,Search } from "lucide-react";
 
 import Sidebar2 from "@/components/Sidebar";
 import Header from "@/components/Header";
@@ -35,7 +35,14 @@ const Expenses = () => {
           <div className="donation-form-card">
             <AddClassForm fields={ExpensesFormSchema} />
           </div>
-
+          <div className="filters-row">
+            <div className="search-box" style={{ position: 'relative' }}>
+              <Search size={18} style={{ position: 'absolute', left: '14px', top: '12px', color: '#555' }} />
+              <input type="text" placeholder="Search resources..." style={{ paddingLeft: '40px' }} />
+            </div>
+            <select className="filter-select"><option>Expenses Id</option></select>
+            <select className="filter-select"><option>Expenses Category</option></select>
+          </div>
           <DataTable
             headers={[
               "Expenses ID",

@@ -125,7 +125,7 @@ const AddClassForm = ({ fields }) => {
 
       <div className="donation-buttons">
         <button type="submit" className="btn-save">
-          Save 
+          Submit
         </button>
       </div>
     </form>

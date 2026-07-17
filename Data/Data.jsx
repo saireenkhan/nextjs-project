@@ -115,11 +115,6 @@ export const DonationFormSchema = [
     type: "row",
     fields: [
       {
-        name: "qrCode",
-        label: "QR Verification",
-        placeholder: "Enter QR code",
-      },
-      {
         name: "receiptProof",
         label: "Upload Receipt",
         type: "file",
@@ -622,43 +617,7 @@ export const StaffFormSchema = [
   {
     type: "row",
     fields: [
-      {
-        name: "AttendanceStatus",
-        label: "Attendance Status",
-        type: "select",
-        options: [
-          "Present",
-          "Absent",
-          "On Leave",
-          "Half Day",
-        ],
-      },
-      {
-        name: "SalaryStatus",
-        label: "Salary Status",
-        type: "select",
-        options: [
-          "Paid",
-          "Partially Paid",
-          "Unpaid",
-        ],
-      },
-      {
-        name: "PaidAmount",
-        label: "Paid Amount",
-        placeholder: "Paid salary",
-      },
-    ],
-  },
-
-  {
-    type: "row",
-    fields: [
-      {
-        name: "UnpaidAmount",
-        label: "Unpaid Amount",
-        placeholder: "Remaining salary",
-      },
+    
     ],
   },
 
