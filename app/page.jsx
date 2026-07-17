@@ -10,7 +10,7 @@ export default function Home() {
   const [selectedRole, setSelectedRole] = useState('Admin');
   const router = useRouter();
 
-  const roles = ['Admin', 'Imam panel', 'Committee member', 'Voter Panel', 'Viewer Panel', 'Accounts Panel','Moazzin Panel'];
+  const roles = ['Admin', 'Imam panel', 'Committee member', 'Voter Panel', 'Viewer Panel', 'Accounts Panel','Moazzin Panel','Muqtadi Panel'];
 
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
@@ -35,6 +35,9 @@ export default function Home() {
         else if (role === 'Moazzin Panel') {
       router.push('/MoazzinPanel/DashboardMoazzinPanel');
     }
+            else if (role === 'Muqtadi Panel') {
+      router.push('/MuqtadiPanel/DashboardMuqtadi');
+    }
   };
 
   const handleLogin = (e) => {
@@ -57,6 +60,9 @@ export default function Home() {
     }
         else if (selectedRole === 'Moazzin Panel') {
       router.push('/MoazzinPanel/DashboardMoazzinPanel');
+    }
+            else if (role === 'Muqtadi Panel') {
+      router.push('/MuqtadiPanel/DashboardMuqtadi');
     }
   };
 

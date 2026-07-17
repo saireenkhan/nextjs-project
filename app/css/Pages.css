@@ -134,7 +134,7 @@ body {
 /* Statistics Grid - Responsive Fallback */
 .stats-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin-bottom: 2rem;
   text-align: center;
@@ -224,10 +224,12 @@ body {
   width: 100%; 
   border-collapse: collapse; 
   text-align: left; 
+  color: white;
 }
 
 .data-table th { 
-  background-color: #f9fafb;
+  background-color: #61c074;
+  
   padding: 1rem; 
   font-size: 12px; 
   color: var(--text-secondary); 
@@ -240,7 +242,7 @@ body {
   padding: 1.25rem 1rem; 
   font-size: 13px;
   border-bottom: 1px solid var(--border-color); 
-  color: #4d4d4d;
+  color: #717171;
   white-space: nowrap; /* Ensures structured alignment layout values hold */
 }
 
