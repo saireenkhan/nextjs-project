@@ -43,11 +43,6 @@ export default function SidebarMuqtadi() {
       icon: <Clock size={18} />,
     },
     {
-      href: "/MuqtadiPanel/Announcement",
-      label: "Announcements",
-      icon: <Megaphone size={18} />,
-    },
-    {
       href: "/MuqtadiPanel/UpcomingEvents",
       label: "Upcoming Events",
       icon: <CalendarDays size={18} />,
