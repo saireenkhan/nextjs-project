@@ -94,71 +94,43 @@ export const AnnouncementFormSchema = [
     ],
   },
 ];
-export const UpcomingEventsData = [
-  {
-    id: 1,
-    event: "Jummah Bayan",
-    date: "15/09/2024",
-    time: "1:00 PM",
-    speaker: "Imam Hafiz Abdul Rahman",
-    location: "Main Hall",
-  },
-  {
-    id: 2,
-    event: "Quran Class",
-    date: "16/09/2024",
-    time: "After Maghrib",
-    speaker: "Qari Bilal",
-    location: "Madrasa Room",
-  },
-  {
-    id: 3,
-    event: "Seerat Program",
-    date: "20/09/2024",
-    time: "8:30 PM",
-    speaker: "Guest Khateeb",
-    location: "Main Hall",
-  },
-];
-
 export const UpcomingEventsFormSchema = [
   {
     type: "row",
     fields: [
       {
-        name: "NextEvent",
-        label: "Next Event",
-        placeholder: "Friday - Jummah Bayan",
+        name: "event",
+        label: "Event Name",
+        placeholder: "e.g., Jummah Bayan",
       },
       {
-        name: "EventTime",
+        name: "date",
+        label: "Event Date",
+        type: "date",
+      },
+      {
+        name: "time",
         label: "Event Time",
-        placeholder: "1:00 PM - Main Hall",
-      },
-      {
-        name: "GuestKhateeb",
-        label: "Guest Khateeb",
-        placeholder: "Mufti Saad",
+        type: "time", // Uses the native browser clock time picker dropdown as shown in your image
       },
     ],
   },
-
   {
     type: "row",
     fields: [
       {
-        name: "ThisMonthEvents",
-        label: "This Month Events",
-        placeholder: "06",
+        name: "speaker",
+        label: "Guest Khateeb / Speaker",
+        placeholder: "e.g., Mufti Saad",
       },
       {
-        name: "MonthlySummary",
-        label: "Monthly Summary",
-        placeholder: "3 bayan, 2 classes, 1 welfare event",
+        name: "topic",
+        label: "Topic",
+        placeholder: "e.g., Seerat-un-Nabi",
       },
       {
-        name: "Status",
-        label: "Guest Khateeb Status",
+        name: "status",
+        label: "Status",
         type: "select",
         options: [
           "Confirmed",
@@ -248,65 +220,20 @@ export const MyDonationHistoryFormSchema = [
     ],
   },
 ];
-export const QuranClassesData = [
-  {
-    id: 1,
-    className: "Nazra Quran",
-    teacher: "Qari Bilal",
-    timing: "After Asr",
-    ageGroup: "7-14 Years",
-    status: "Open",
-  },
-  {
-    id: 2,
-    className: "Hifz Class",
-    teacher: "Hafiz Usman",
-    timing: "After Fajr",
-    ageGroup: "8-16 Years",
-    status: "Limited Seats",
-  },
-  {
-    id: 3,
-    className: "Tajweed Class",
-    teacher: "Qari Ahmed",
-    timing: "After Maghrib",
-    ageGroup: "All Ages",
-    status: "Open",
-  },
+export const QuranClassesFormSchema = [
+  { name: "className", label: "Class Name", type: "text", required: true, placeholder: "e.g., Section 1" },
+  { name: "teacher", label: "Teacher Name", type: "text", required: true, placeholder: "e.g., Qari Hamza" },
+  { name: "timeFrom", label: "Time From", type: "time", required: true },
+  { name: "timeTo", label: "Time To", type: "time", required: true },
+  { name: "ageGroup", label: "Age Group", type: "text", required: true, placeholder: "e.g., 6 - 12 Years" },
+  { name: "status", label: "Status", type: "select", options: ["Open", "Closed"], required: true }
 ];
-export const IslamicCalendarData = [
-  {
-    id: 1,
-    event: "Ramadan Begins",
-    hijriDate: "1 Ramadan",
-    gregorianDate: "Expected",
-    program: "Taraweeh Schedule",
-    status: "Upcoming",
-  },
-  {
-    id: 2,
-    event: "Laylat-ul-Qadr",
-    hijriDate: "Odd Nights",
-    gregorianDate: "Last Ashra",
-    program: "Special Qiyam",
-    status: "Planned",
-  },
-  {
-    id: 3,
-    event: "Eid-ul-Fitr",
-    hijriDate: "1 Shawwal",
-    gregorianDate: "Moon Sighting",
-    program: "Eid Prayer",
-    status: "Upcoming",
-  },
-  {
-    id: 4,
-    event: "Ashura",
-    hijriDate: "10 Muharram",
-    gregorianDate: "Expected",
-    program: "Bayan / Fasting Reminder",
-    status: "Info",
-  },
+export const IslamicCalendarFormSchema = [
+  { name: "event", label: "Islamic Event", type: "text", required: true, placeholder: "e.g., Ramadan Start" },
+  { name: "hijriDate", label: "Hijri Date", type: "text", required: true, placeholder: "e.g., 1 Ramadan 1448" },
+  { name: "gregorianDate", label: "Expected Gregorian Date", type: "text", required: true, placeholder: "e.g., Feb 18, 2027" },
+  { name: "program", label: "Program Details", type: "text", required: true, placeholder: "e.g., Tarawih & Special Dars" },
+  { name: "status", label: "Status", type: "select", options: ["Upcoming", "Planned", "Completed"], required: true }
 ];
 export const ServiceRequestData = [
   {

@@ -1,13 +1,14 @@
-/* --- White Theme Variables --- */
+/* dashboard css */
+/* --- Theme Variables --- */
 :root {
-  --bg-main: #f8f9fa;       
+  --bg-main: #DBE5EB;       
   --bg-card: #ffffff;       
   --bg-input: #ffffff;      
-  --border-color: #e5e7eb;  
-  --text-primary: #111827;  
-  --text-secondary: #6b7280;
-  --accent-blue: #006fee;   
-  --accent-green: #16a34a;  
+  --border-color: #BACCD7;  
+  --text-primary: #1E3A4C;  
+  --text-secondary: #517388;
+  --accent-blue: #3D5F74;   
+  --accent-green: #2C4C60;  
   --accent-red: #dc2626;    
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -46,7 +47,7 @@ body {
   min-width: var(--sidebar-width);
   max-width: var(--sidebar-width);
   height: 100vh;
-  background: #111111; 
+  background: #1E3A4C; 
   flex-shrink: 0;
   z-index: 100;
 }
@@ -125,13 +126,13 @@ body {
 .welcome-name { 
   font-size: 32px; 
   font-weight: 700; 
-  color: #000000; 
+  color: #1E3A4C; 
   margin: 0;
   text-align: left;
 }
 
 .welcome-text { 
-  color:#54ca4c; 
+  color:#3D5F74; 
   font-weight: 500; 
   margin: 4px 0 0 0; 
   text-align: left; 
@@ -151,7 +152,7 @@ body {
   background: #FFFFFF;
   padding: 20px;
   border-radius: 16px;
-  border: 1px solid #BFDBFE;
+  border: 1px solid #BACCD7;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 5%);
   min-width: 0;
   display: flex;
@@ -167,13 +168,13 @@ body {
 
 .stat-card-title { 
   font-size: 14px; 
-  color: #027a30; 
+  color: #2C4C60; 
   font-weight: 700; 
 }
 
 .stat-card-date { 
   font-size: 12px; 
-  color: #6b7280; 
+  color: #67879B; 
   font-weight: 600; 
 }
 
@@ -194,7 +195,7 @@ body {
   font-size: 18px; 
   font-weight: 800; 
   margin: 0 0 6px 0; 
-  color: #272727; 
+  color: #1E3A4C; 
   line-height: 1.2;
 }
 
@@ -250,12 +251,12 @@ body {
 }
 
 .container, .overview-card {
-    color: #000000;
+    color: #1E3A4C;
   background-color: white;
   padding: 24px;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 5%);
-  border: 1px solid #BFDBFE;
+  border: 1px solid #BACCD7;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -269,7 +270,7 @@ body {
   margin-bottom: 20px; 
   gap: 15px;
   flex-wrap: wrap;
-  color: black; /* Allows custom select dropdowns to wrap gracefully on mobile devices */
+  color: #1E3A4C; /* Allows custom select dropdowns to wrap gracefully on mobile devices */
 }
 
 .header-actions {
@@ -286,16 +287,16 @@ body {
   background: #FFFFFF; 
   border-radius: 16px; 
   padding: 12px; 
-  border: 1px solid #BFDBFE; 
+  border: 1px solid #BACCD7; 
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 5%); 
 }
 
 .chart-select {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #BACCD7;
   padding: 6px 12px;
   border-radius: 6px;
   font-size: 12px;
-  color: #64748b;
+  color: #517388;
   background-color: #fff;
   cursor: pointer;
 }
@@ -306,7 +307,7 @@ body {
   align-items: center;
   gap: 16px;
   font-size: 13px;
-  color: #475569;
+  color: #517388;
 }
 .legend-dot, .dot {
   display: inline-block;
@@ -315,8 +316,8 @@ body {
   border-radius: 50%;
   margin-right: 4px;
 }
-.legend-dot.income, .dot.income { background-color: #036b1d93; }
-.legend-dot.expense, .dot.expense { background-color: #60fa93; }
+.legend-dot.income, .dot.income { background-color: #2C4C60; }
+.legend-dot.expense, .dot.expense { background-color: #9CB4C3; }
 
 /* --- Radial & Donut Graph Settings --- */
 .overview-body {
@@ -346,20 +347,20 @@ body {
 
 .legend-item {
   font-size: 13px;
-  color: #64748b;
+  color: #517388;
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f8fafc;
+  background: #DBE5EB;
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid #f1f5f9;
+  border: 1px solid #BACCD7;
 }
 
-.legend-item strong { color: #1e3b31; margin-left: auto; }
-.dot.b1 { background: #55a763; width: 8px; height: 8px; border-radius: 50%; }
-.dot.b2 { background: #88ffa2; width: 8px; height: 8px; border-radius: 50%; }
-.dot.b3 { background: #244736; width: 8px; height: 8px; border-radius: 50%; }
+.legend-item strong { color: #1E3A4C; margin-left: auto; }
+.dot.b1 { background: #3D5F74; width: 8px; height: 8px; border-radius: 50%; }
+.dot.b2 { background: #9CB4C3; width: 8px; height: 8px; border-radius: 50%; }
+.dot.b3 { background: #1E3A4C; width: 8px; height: 8px; border-radius: 50%; }
 
 /* --- Table Perfection Engine --- */
 .table-card {
@@ -380,7 +381,7 @@ body {
 }
 
 .table-header-blue {
-  background-color: #3bf68f;
+  background-color: #3D5F74;
   display: flex;
   padding: 14px 0;
   border-radius: 8px 8px 0 0;
@@ -407,9 +408,9 @@ body {
 .report-table td,
 .task-table td {
   padding: 16px 20px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #DBE5EB;
   font-size: 13px;
-  color: #475569;
+  color: #517388;
   white-space: normal !important; 
   word-break: break-word;
 }
@@ -423,13 +424,17 @@ body {
   display: inline-block;
 }
 
-.rate-urgent { background: #fee2e2; color: #ef4444; }
+/* NOTE: urgent stays red on purpose — the given palette has no red,
+   and losing that signal would make "urgent" hard to distinguish
+   from "medium"/"low" at a glance. Medium stays amber for the same
+   reason. Low priority is remapped onto the palette. */
+.rate-urgent { background: #fee2e2; color: #dc2626; }
 .rate-medium { background: #fef3c7; color: #d97706; }
-.rate-low { background: #dcfce7; color: #10b981; }
+.rate-low { background: #DBE5EB; color: #2C4C60; }
 
-.status-pending { background: #e0f2fe; color: #3B82F6; }
-.status-in-progress { background: #e0f2fe; color: #0284c7; }
-.status-review { background: #f5f3ff; color: #7c3aed; }
+.status-pending { background: #DBE5EB; color: #517388; }
+.status-in-progress { background: #BACCD7; color: #3D5F74; }
+.status-review { background: #9CB4C3; color: #1E3A4C; }
 
 /* --- Responsive Media Adjustments --- */
 

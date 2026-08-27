@@ -1,3 +1,4 @@
+/* sidebar css */
 * {
   margin: 0;
   padding: 0;
@@ -45,7 +46,7 @@
 }
 
 .data-table th { 
-  background-color: #f9fafb;
+  background-color: #DBE5EB;
   padding: 1rem; 
   font-size: 12px; 
   color: var(--text-secondary); 
@@ -75,8 +76,8 @@
 .sidebar {
   width: 280px; 
   min-width: 240px; 
-  background: #000000;
-  color: #000000;
+  background: #1E3A4C;
+  color: #FFFFFF;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -99,7 +100,7 @@
 .main-content {
   flex: 1; 
   min-width: 0; 
-  background-color: #f8f9fa; 
+  background-color: #DBE5EB; 
   padding: 20px;
   min-height: 100vh;
 }
@@ -107,13 +108,13 @@
 /* --- HEADER & ELEMENTS --- */
 .sidebar-header {
   padding: 18px 16px;
-  background: #000000;
+  background: #1E3A4C;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 70px;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #2C4C60;
 }
 
 .brand-container {
@@ -135,7 +136,7 @@
 }
 
 .user-info {
-  color: #aaa;
+  color: #9CB4C3;
   font-size: 12px;
   margin: 4px 0 0 0;
 }
@@ -161,7 +162,7 @@
 
 .toggle-btn.expand-btn {
   margin-left: auto;
-  background: #0083fd;
+  background: #3D5F74;
 }
 
 /* --- MENU NAVIGATION LINKS --- */
@@ -180,7 +181,7 @@ width: 100%;
   align-items: center;
   padding: 12px 16px;
   font-size: 14px;
-  color: #ebebeb;
+  color: #DBE5EB;
   text-decoration: none;
   transition: all 0.2s ease;
   position: relative;
@@ -189,12 +190,12 @@ width: 100%;
 }
 
 .menu-link:hover {
-  background:#54ca4c21;
+  background:#3D5F7433;
   color: #ffffff;
 }
 
 .menu-link.active {
-  background:#54ca4c3b;
+  background:#3D5F745c;
   color: #ffffff;
   font-weight: 600;
 }
@@ -222,7 +223,7 @@ width: 100%;
   right: 12px;
   width: 6px;
   height: 6px;
-  background: #55CA4C;
+  background: #9CB4C3;
   border-radius: 50%;
 }
 
@@ -285,7 +286,7 @@ width: 100%;
     inset: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.4); 
+    background: rgba(30, 58, 76, 0.4); 
     z-index: 998; 
     pointer-events: auto !important; 
   }
@@ -325,7 +326,7 @@ width: 100%;
     top: 15px;
     left: 20px;
     z-index: 1000;
-    background: #747474;
+    background: #517388;
     border: none;
     padding: 10px 12px;
     border-radius: 4px;

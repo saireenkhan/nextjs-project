@@ -1,13 +1,14 @@
-/* --- White Theme Variables --- */
+/* --- Theme Variables --- */
+/* pages css */
 :root {
-  --bg-main: #f8f9fa;       
+  --bg-main: #f4fafe;       
   --bg-card: #ffffff;       
   --bg-input: #ffffff;      
-  --border-color: #e5e7eb;  
-  --text-primary: #111827;  
-  --text-secondary: #6b7280;
-  --accent-blue: #006fee;   
-  --accent-green: #16a34a;  
+  --border-color: #BACCD7;  
+  --text-primary: #1E3A4C;  
+  --text-secondary: #517388;
+  --accent-blue: #3D5F74;   
+  --accent-green: #2C4C60;  
   --accent-red: #dc2626;    
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -29,7 +30,20 @@ body {
   overflow: hidden; /* Prevents double scrollbars */
   background-color: var(--bg-main);
 }
-
+button{
+  display: flex;
+  alignItems: center;
+  gap: "8px";
+  backgroundColor:#0e3b63;
+  color: #fff;
+  padding: 10px 18px;
+  borderRadius: 6px;
+  border: none;
+  cursor: pointer;
+  fontWeight: 600;
+  fontSize: 14px;
+  boxShadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 /* --- Fixed Layout Structure --- */
 .campus-layout {
   display: flex;
@@ -44,7 +58,7 @@ body {
   min-width: var(--sidebar-width);
   max-width: var(--sidebar-width);
   height: 100vh;
-  background: #111111; 
+  background: #1E3A4C; 
   flex-shrink: 0;
   z-index: 100;
   transition: all 0.3s ease;
@@ -55,7 +69,7 @@ body {
 .main-content {
   flex: 1;
   min-width: 0;
-  background-color: #f8f9fa;
+  background-color: #f8fcff;
   min-height: 100vh;
 
   /* IMPORTANT */
@@ -150,13 +164,13 @@ body {
 }
 .stat-card > div:first-of-type {
   font-size: 14px; 
-  color: #b1b1b1; 
+  color: #809DAF; 
   font-weight: 700; 
 }
 .stat-number { 
   font-size: 18px; 
   font-weight: 800; 
-  color: #6b7280; 
+  color: #517388; 
 }
 
 /* --- Filters Bar --- */
@@ -174,7 +188,7 @@ body {
 }
 
 .filter-select {
-  background-color: #86c9a7;
+  background-color: #3D5F74;
   color: white;
   border: none;
   padding: 12px 16px;
@@ -191,17 +205,17 @@ body {
   flex: 3; 
   position: relative; 
   min-width: 200px;
-  color: #4d4d4d;
+  color: #517388;
 }
 
 .search-box input {
   width: 100%;
-  background: #f9fafb;
+  background: #DBE5EB;
   border: 1px solid var(--border-color);
   padding: 12px 12px 12px 40px;
   border-radius: 8px;
   outline: none;
-  color: rgb(99, 99, 99);
+  color: #1E3A4C;
 }
 
 /* --- Table Styling --- */
@@ -228,11 +242,11 @@ body {
 }
 
 .data-table th { 
-  background-color: #61c074;
+  background-color: #3D5F74;
   
   padding: 1rem; 
   font-size: 12px; 
-  color: var(--text-secondary); 
+  color: white; 
   text-transform: uppercase;
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
@@ -242,7 +256,7 @@ body {
   padding: 1.25rem 1rem; 
   font-size: 13px;
   border-bottom: 1px solid var(--border-color); 
-  color: #717171;
+  color: #517388;
   white-space: nowrap; /* Ensures structured alignment layout values hold */
 }
 
@@ -250,7 +264,7 @@ body {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(30, 58, 76, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -279,7 +293,7 @@ body {
 }
 
 .modal-title h2 { 
-  color: grey; 
+  color: #517388; 
   margin: 0;
   font-size: 1.5rem;
 }
@@ -308,23 +322,24 @@ body {
   padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  background: #f9fafb;
-  color: #111111;
+  background: #DBE5EB;
+  color: #1E3A4C;
   outline: none;
 }
 
 textarea {
   width: 100%;
   padding: 13px;
-  background: #f1f1f1a1;
-  border: 2px solid #f1f1f1;
+  background: #DBE5EB80;
+  color: #517388;
+  border: 2px solid #DBE5EB;
   border-radius: 5px;
   outline: none;
   resize: vertical;
 }
 
 .btn-add {
-  background: #55ca4c;
+  background: #3D5F74;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -335,7 +350,7 @@ textarea {
 }
 
 .btn-export {
-  background: grey;
+  background: #67879B;
   color: white;
   border: none;
   margin-right: 5px;
@@ -449,10 +464,10 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fbfbfc;
+  background-color: #DBE5EB;
   
-  /* Gives the mobile card a prominent light blue indicator strip on the right side */
-  border-right: 4px solid #348cff; 
+  /* Gives the mobile card a prominent navy indicator strip on the right side */
+  border-right: 4px solid #3D5F74; 
 }
 /* ================= Responsive Trigger (< 850px) ================= */
 @media (max-width: 1200px) {
@@ -481,7 +496,7 @@ textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #fbfbfc;
+    background-color: #DBE5EB;
   }
 
   .mobile-row-summary {
@@ -548,11 +563,11 @@ textarea {
   }
 }
 .donation-info-box {
-  background: #edf9f0;
-  border-left: 4px solid #16a34a;
+  background: #DBE5EB;
+  border-left: 4px solid #3D5F74;
   padding: 14px 18px;
   border-radius: 8px;
-  color: #166534;
+  color: #1E3A4C;
   margin-bottom: 24px;
 }
 
@@ -561,7 +576,7 @@ textarea {
   border-radius: 16px;
   padding: 28px;
   margin-bottom: 24px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #BACCD7;
   box-shadow: var(--shadow-sm);
 }
 
@@ -588,7 +603,7 @@ textarea {
 }
 
 .btn-save {
-  background: #16a34a;
+  background: #2C4C60;
   color: white;
   border: none;
   padding: 12px 22px;
@@ -598,7 +613,7 @@ textarea {
 }
 
 .btn-receipt {
-  background: #111111;
+  background: #1E3A4C;
   color: white;
   border: none;
   padding: 12px 22px;
@@ -608,7 +623,7 @@ textarea {
 }
 
 .btn-pdf {
-  background: #16a34a;
+  background: #2C4C60;
   color: white;
   border: none;
   padding: 12px 22px;

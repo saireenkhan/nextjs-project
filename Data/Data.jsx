@@ -1343,24 +1343,25 @@ export const CandidatesFormSchema = [
   {
     type: "row",
     fields: [
-      {
-        name: "CandidateId",
-        label: "Candidate ID",
-        placeholder: "CAN-001",
-        required: true,
-      },
-      {
-        name: "CandidateName",
-        label: "Candidate Name",
-        placeholder: "Candidate name",
-        required: true,
-      },
-      {
-        name: "Position",
-        label: "Position",
-        placeholder: "Position",
-        required: true,
-      },
+{ 
+    name: "candidateId", 
+    label: "Candidate ID", 
+    type: "text", 
+    defaultValue: `ID-${Math.floor(1000 + Math.random() * 9000)}` 
+  },
+  { 
+name: "candidateName",
+  label: "Candidate Name",
+  type: "text",
+  defaultValue: "", // <-- Explicitly force it to be empty
+  placeholder: "Enter candidate full name..." // Ensure no ID generation here
+  },
+  { 
+    name: "position", 
+    label: "Position", 
+    type: "text", 
+    placeholder: "e.g. President, Secretary" 
+  },
     ],
   },
 
@@ -1752,73 +1753,42 @@ export const ComplaintsFormSchema = [
     rows: 4,
   },
 ];
-export const UsersRolesData = [
-  {
-    id: 1,
-    userId: "USR-001",
-    fullName: "Muhammad Ahmed",
-    username: "admin@masjid.com",
-    role: "Admin",
-    twoFactor: "Enabled",
-    status: "Active",
-  },
-  {
-    id: 2,
-    userId: "USR-002",
-    fullName: "Qari Abdul Rehman",
-    username: "imam@masjid.com",
-    role: "Imam",
-    twoFactor: "Enabled",
-    status: "Active",
-  },
-  {
-    id: 3,
-    userId: "USR-003",
-    fullName: "Abdul Hameed",
-    username: "committee@masjid.com",
-    role: "Committee Member",
-    twoFactor: "Disabled",
-    status: "Inactive",
-  },
-];
-
 export const UsersRolesFormSchema = [
   {
     type: "row",
     fields: [
       {
-        name: "UserId",
+        name: "userId",
         label: "User ID",
         placeholder: "USR-001",
         required: true,
       },
       {
-        name: "FullName",
+        name: "fullName",
         label: "Full Name",
         placeholder: "Full name",
         required: true,
       },
       {
-        name: "Username",
+        name: "username",
         label: "Email / Username",
         placeholder: "Email or username",
         required: true,
       },
     ],
   },
-
   {
     type: "row",
     fields: [
       {
-        name: "Password",
+        name: "password",
         label: "Password",
         type: "password",
-        placeholder: "Password",
+        placeholder: "Enter password",
         required: true,
       },
       {
-        name: "Role",
+        name: "role",
         label: "Role",
         type: "select",
         options: [
@@ -1834,34 +1804,7 @@ export const UsersRolesFormSchema = [
         required: true,
       },
       {
-        name: "CanAdd",
-        label: "Can Add",
-        type: "select",
-        options: ["Yes", "No"],
-        required: true,
-      },
-    ],
-  },
-
-  {
-    type: "row",
-    fields: [
-      {
-        name: "CanEdit",
-        label: "Can Edit",
-        type: "select",
-        options: ["Yes", "No"],
-        required: true,
-      },
-      {
-        name: "CanDelete",
-        label: "Can Delete",
-        type: "select",
-        options: ["Yes", "No"],
-        required: true,
-      },
-      {
-        name: "TwoFactor",
+        name: "twoFactor",
         label: "Two-Step Authentication",
         type: "select",
         options: ["Enabled", "Disabled"],
@@ -1869,24 +1812,29 @@ export const UsersRolesFormSchema = [
       },
     ],
   },
-
   {
     type: "row",
     fields: [
       {
-        name: "Status",
+        name: "status",
         label: "Status",
         type: "select",
-        options: [
-          "Active",
-          "Inactive",
-          "Suspended",
-        ],
+        options: ["Active", "Inactive", "Suspended"],
         required: true,
       },
     ],
   },
 ];
+export const roleColors = {
+  'Admin': '#dc2626',
+  'Accounts': '#7c3aed',
+  'Imam': '#059669',
+  'Moazzin': '#d97706',
+  'Committee Member': '#2563eb',
+  'Voter': '#db2777',
+  'Muqtadi': '#0891b2',
+  'Viewer': '#64748b'
+};
 export const AuditData = [
   {
     id: 1,

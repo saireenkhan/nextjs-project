@@ -1,3 +1,5 @@
+/* header css */
+
 .header {
   position: fixed;
   display: flex;
@@ -32,7 +34,7 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #a0aec0;
+  color: #809DAF;
   pointer-events: none;
 }
 
@@ -42,8 +44,8 @@
   padding: 8px 15px 8px 38px;
   border-radius: 6px;
   background-color: white;
-  border: 1px solid #e2e8f0;
-  color: #2d3748;
+  border: 1px solid #BACCD7;
+  color: #1E3A4C;
   font-size: 14px;
   outline: none;
   box-sizing: border-box;
@@ -59,7 +61,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #4a5568;
+  color: #517388;
 }
 
 .cursor-pointer {
@@ -69,7 +71,7 @@
 .divider {
   width: 1px;
   height: 20px;
-  background: #e2e8f0;
+  background: #BACCD7;
 }
 
 .profile {
@@ -84,14 +86,14 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #BACCD7;
   object-fit: cover;
 }
 
 .profile-name {
   font-size: 14px;
   font-weight: 600;
-  color: #2d3748;
+  color: #1E3A4C;
 }
 
 .chevron-icon {
@@ -107,10 +109,10 @@
   top: 55px;
   right: 0;
   background: white;
-  color: #929292;
+  color: #517388;
   border-radius: 8px;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
+  border: 1px solid #BACCD7;
   width: 180px;
   overflow: hidden;
   z-index: 1000;
@@ -126,14 +128,17 @@
 }
 
 .dropdown div:hover {
-  background: #f8fafc;
+  background: #DBE5EB;
 }
 
 .dropdown-divider {
   height: 1px;
-  background: #e2e8f0;
+  background: #BACCD7;
 }
 
+/* NOTE: kept red — logout is a destructive/critical action and the
+   given palette has no red in it. Losing that signal would make it
+   blend in with ordinary menu items. */
 .logout {
   color: #e53e3e;
 }
