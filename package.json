@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-"dev": "next dev --webpack",
+"dev": "next dev --webpack -p 3002",
+"start": "next start -p 3002",
     "seed": "node seedAdmin.js",
     "seed:admin": "node seedAdmin.js",
   "build": "next build --webpack",
-  "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
