@@ -1,37 +1,46 @@
-// models/Report.js
 const mongoose = require('mongoose');
 
-const reportSchema = new mongoose.Schema({
-  reportType: {
-    type: String,
-    required: true,
-    default: "General Financial Statement"
+const reportSchema = new mongoose.Schema(
+  {
+    // Owner of this report
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
+      required: true,
+      index: true
+    },
+
+    reportType: {
+      type: String,
+      required: true
+    },
+
+    fromDate: {
+      type: Date,
+      required: true
+    },
+
+    toDate: {
+      type: Date,
+      required: true
+    },
+
+    fundCategory: {
+      type: String
+    },
+
+    format: {
+      type: String,
+      required: true
+    },
+
+    generatedBy: {
+      type: String
+    }
   },
-  fromDate: {
-    type: String,
-    required: true
-  },
-  toDate: {
-    type: String,
-    required: true
-  },
-  fundCategory: {
-    type: String,
-    required: true,
-    default: "Masjid general fund"
-  },
-  format: {
-    type: String,
-    required: true,
-    default: "PDF"
-  },
-  generatedBy: {
-    type: String,
-    required: true,
-    default: "Admin"
+  {
+    timestamps: true
   }
-}, {
-  timestamps: true
-});
+);
 
 module.exports = mongoose.model('Report', reportSchema);

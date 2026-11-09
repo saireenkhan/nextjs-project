@@ -1,27 +1,58 @@
 const express = require("express");
 const router = express.Router();
+
 const BankCash = require("../models/bankCash");
 const PDFDocument = require("pdfkit");
 
-// GET: Generate PDF Receipt
-router.get("/:id/pdf", async (req, res) => {
+const { authenticate } = require("../middleware/auth");
+const { getQueryFilter } = require("../utils/queryHelper");
+
+// ======================================================
+// GET PDF
+// User can only generate PDF for their own transaction
+// Admin can generate PDF for any transaction
+// ======================================================
+
+router.get("/:id/pdf", authenticate, async (req, res) => {
   try {
-    const record = await BankCash.findById(req.params.id);
+    const record = await BankCash.findOne(
+      getQueryFilter(req, {
+        _id: req.params.id,
+      })
+    );
+
     if (!record) {
       return res.status(404).send("Transaction not found for PDF");
     }
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `inline; filename=bank-cash-${record.transactionId}.pdf`);
+    res.setHeader(
+      "Content-Disposition",
+      `inline; filename=bank-cash-${record.transactionId}.pdf`
+    );
 
     const doc = new PDFDocument({ margin: 50 });
     doc.pipe(res);
 
-    doc.fontSize(22).fillColor("#166534").text("Hisab-Ul-Khair", { align: "center" });
-    doc.fontSize(12).fillColor("#555555").text("Bank & Cash Book Transaction Report", { align: "center" });
+    doc
+      .fontSize(22)
+      .fillColor("#166534")
+      .text("Hisab-Ul-Khair", { align: "center" });
+
+    doc
+      .fontSize(12)
+      .fillColor("#555555")
+      .text("Bank & Cash Book Transaction Report", {
+        align: "center",
+      });
+
     doc.moveDown(2);
 
-    doc.fontSize(16).fillColor("#000000").text("Transaction Summary", { underline: true });
+    doc
+      .fontSize(16)
+      .fillColor("#000000")
+      .text("Transaction Summary", { underline: true });
+
     doc.moveDown(1);
 
     doc.fontSize(12).text(`Transaction ID: ${record.transactionId}`);
@@ -34,32 +65,52 @@ router.get("/:id/pdf", async (req, res) => {
     doc.text(`Remarks: ${record.remarks || "N/A"}`);
 
     doc.moveDown(4);
-    doc.fontSize(10).fillColor("#888888").text("This is a system-generated electronic document.", { align: "center" });
+
+    doc
+      .fontSize(10)
+      .fillColor("#888888")
+      .text("This is a system-generated electronic document.", {
+        align: "center",
+      });
 
     doc.end();
   } catch (error) {
     console.error("Error generating PDF:", error);
+
     res.status(500).send("Server Error generating PDF");
   }
 });
 
-
 // ======================================================
 // GET ACCOUNTS TRANSACTIONS
-// Accounts can ONLY see transactions created by Accounts
+// Accounts users see ONLY their own Accounts transactions
+// Admin can see Accounts transactions too
 // ======================================================
 
-router.get("/accounts", async (req, res) => {
+router.get("/accounts", authenticate, async (req, res) => {
   try {
-    const list = await BankCash.find({
+    if (req.user.role !== "Admin" && req.user.panel !== "Accounts") {
+      return res.status(403).json({
+        success: false,
+        error: "Access denied",
+      });
+    }
+
+    const filter = getQueryFilter(req, {
       source: "accounts",
-    }).sort({ createdAt: -1 });
+    });
+
+    const list = await BankCash.find(filter).sort({
+      createdAt: -1,
+    });
 
     res.json({
       success: true,
       data: list,
     });
   } catch (error) {
+    console.error("Error fetching Accounts transactions:", error);
+
     res.status(500).json({
       success: false,
       error: error.message,
@@ -67,14 +118,20 @@ router.get("/accounts", async (req, res) => {
   }
 });
 
-
 // ======================================================
 // GET ADMIN TRANSACTIONS
-// Admin can see BOTH Accounts + Admin transactions
+// Admin sees ALL users' transactions
 // ======================================================
 
-router.get("/admin", async (req, res) => {
+router.get("/admin", authenticate, async (req, res) => {
   try {
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({
+        success: false,
+        error: "Admin access required",
+      });
+    }
+
     const list = await BankCash.find().sort({
       createdAt: -1,
     });
@@ -84,6 +141,8 @@ router.get("/admin", async (req, res) => {
       data: list,
     });
   } catch (error) {
+    console.error("Error fetching Admin transactions:", error);
+
     res.status(500).json({
       success: false,
       error: error.message,
@@ -91,19 +150,28 @@ router.get("/admin", async (req, res) => {
   }
 });
 
-
 // ======================================================
 // CREATE TRANSACTION FROM ACCOUNTS PANEL
+// Ownership comes from logged-in user
+// NOT from frontend
 // ======================================================
 
-router.post("/accounts", async (req, res) => {
+router.post("/accounts", authenticate, async (req, res) => {
   try {
+    if (req.user.role !== "Admin" && req.user.panel !== "Accounts") {
+      return res.status(403).json({
+        success: false,
+        error: "Access denied",
+      });
+    }
+
     const newRecord = new BankCash({
       ...req.body,
 
-      // VERY IMPORTANT
-      // We decide the source from the endpoint,
-      // not from the frontend.
+      // Never trust frontend ownership
+      user: req.user._id,
+
+      // Source is controlled by the endpoint
       source: "accounts",
     });
 
@@ -115,6 +183,7 @@ router.post("/accounts", async (req, res) => {
     });
   } catch (error) {
     console.error("Error saving transaction:", error);
+
     res.status(400).json({
       success: false,
       error: error.message,
@@ -122,17 +191,27 @@ router.post("/accounts", async (req, res) => {
   }
 });
 
-
 // ======================================================
 // CREATE TRANSACTION FROM ADMIN PANEL
+// Admin creates data owned by Admin
 // ======================================================
 
-router.post("/admin", async (req, res) => {
+router.post("/admin", authenticate, async (req, res) => {
   try {
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({
+        success: false,
+        error: "Admin access required",
+      });
+    }
+
     const newRecord = new BankCash({
       ...req.body,
 
-      // VERY IMPORTANT
+      // Admin's own user ID
+      user: req.user._id,
+
+      // Source is controlled by backend
       source: "admin",
     });
 
@@ -143,7 +222,8 @@ router.post("/admin", async (req, res) => {
       data: saved,
     });
   } catch (error) {
-    console.error("Error saving transaction:", error);
+    console.error("Error saving Admin transaction:", error);
+
     res.status(400).json({
       success: false,
       error: error.message,

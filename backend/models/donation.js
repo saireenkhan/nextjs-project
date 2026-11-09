@@ -1,99 +1,82 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const DonationSchema = new mongoose.Schema(
+const donationSchema = new mongoose.Schema(
   {
-    // Which panel created this donation
+    // Owner of this donation record
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
+      required: true,
+      index: true
+    },
+
     panel: {
       type: String,
-      required: true,
       enum: [
-        "admin",
-        "accounts",
-        "controller",
-        "imam",
-        "muqtadi",
-        "moazzin",
+        'admin',
+        'accounts',
+        'controller',
+        'imam',
+        'muqtadi',
+        'moazzin'
       ],
-      default: "accounts",
+      required: true
     },
 
     donorName: {
       type: String,
       required: true,
+      trim: true
     },
 
     donorPhone: {
       type: String,
-      default: "",
+      trim: true
     },
 
     donorCNIC: {
       type: String,
-      default: "",
+      trim: true
     },
 
     donationType: {
       type: String,
-      enum: [
-        "Cash",
-        "Online",
-        "Online Transfer",
-        "Cheque",
-        "Bank Transfer",
-      ],
-      required: true,
+      required: true
     },
 
     fundCategory: {
       type: String,
-      enum: [
-        "General Donation",
-        "Zakat",
-        "Zakat Fund",
-         "Sadaqah Fund",
-       "Madrasa Fund", 
-        "Masjid Fund",
-        "Building Fund",
-        "Education Fund",
-      ],
-      required: true,
+      required: true
     },
 
     amount: {
       type: Number,
-      required: true,
+      required: true
     },
 
     donationDate: {
-      type: String,
-      default: "",
+      type: Date,
+      required: true
     },
 
     receiptNumber: {
       type: String,
       unique: true,
-      sparse: true,
+      sparse: true
     },
 
     status: {
       type: String,
-      enum: ["Pending", "Verified", "Completed"],
-      default: "Pending",
+      default: 'Completed'
     },
 
     notes: {
-      type: String,
-      default: "",
-    },
-
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
+      type: String
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 
-module.exports = mongoose.model("Donation", DonationSchema);
+module.exports = mongoose.model('Donation', donationSchema);

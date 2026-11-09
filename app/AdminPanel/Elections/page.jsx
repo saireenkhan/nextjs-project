@@ -219,49 +219,23 @@ const Elections = () => {
           {/* ================= HEADER ================= */}
 
           <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-              marginBottom: "16px",
-            }}
-          >
-
-            <PageHeader
-              title="Election Management"
-            />
-
-
-            <button
-              onClick={() =>
-                setIsModalOpen(true)
-              }
-
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                backgroundColor:
-                  "var(--primary-color, #10b981)",
-                color: "#fff",
-                padding: "10px 18px",
-                borderRadius: "6px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "600",
-                fontSize: "14px",
-                whiteSpace: "nowrap",
-              }}
-            >
-
-              <Plus size={18} />
-
-              Create New Election
-
-            </button>
-
-          </div>
+             style={{
+               display: "flex",
+               alignItems: "center",
+               width: "100%",
+               marginBottom: "16px",
+               gap: "20px",
+             }}
+           >
+             <div style={{ flex: 1, minWidth: 0 }}>
+               <PageHeader title="Election Management" />
+             </div>
+           
+             <button className="btn-add-staff">
+               <Plus size={18} />
+              Create Election
+             </button>
+             </div>
 
 
           {/* ================= INFO ================= */}

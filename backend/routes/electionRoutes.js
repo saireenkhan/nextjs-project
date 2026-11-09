@@ -3,16 +3,32 @@ const router = express.Router();
 const Election = require("../models/Election");
 const PDFDocument = require("pdfkit");
 
+const { authenticate } = require("../middleware/auth");
+const { getQueryFilter } = require("../utils/queryHelper");
+
+// ======================================================
+// AUTHENTICATION
+// ======================================================
+
+router.use(authenticate);
+
+
 // ======================================================
 // ADMIN - GET ALL ELECTIONS
-// Admin can see BOTH admin + committee elections
+// Admin can see ALL users' elections
 // ======================================================
 
 router.get("/admin", async (req, res) => {
   try {
-    const elections = await Election.find().sort({
-      createdAt: -1,
-    });
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({
+        success: false,
+        error: "Admin access required.",
+      });
+    }
+
+    const elections = await Election.find()
+      .sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -31,15 +47,27 @@ router.get("/admin", async (req, res) => {
 
 // ======================================================
 // COMMITTEE - GET COMMITTEE ELECTIONS ONLY
+// Each Committee user sees ONLY their own elections
 // ======================================================
 
 router.get("/committee", async (req, res) => {
   try {
-    const elections = await Election.find({
+    if (
+      req.user.role !== "Admin" &&
+      req.user.panel !== "Committee"
+    ) {
+      return res.status(403).json({
+        success: false,
+        error: "Committee access required.",
+      });
+    }
+
+    const filter = getQueryFilter(req, {
       source: "committee",
-    }).sort({
-      createdAt: -1,
     });
+
+    const elections = await Election.find(filter)
+      .sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -58,15 +86,24 @@ router.get("/committee", async (req, res) => {
 
 // ======================================================
 // ADMIN - CREATE ELECTION
-// Backend decides source = admin
+// Backend controls source + owner
 // ======================================================
 
 router.post("/admin", async (req, res) => {
   try {
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({
+        success: false,
+        error: "Admin access required.",
+      });
+    }
+
     const newElection = new Election({
       ...req.body,
 
-      // IMPORTANT
+      // Backend-controlled ownership
+      user: req.user._id,
+
       // Never trust frontend for source
       source: "admin",
     });
@@ -97,16 +134,26 @@ router.post("/admin", async (req, res) => {
 
 // ======================================================
 // COMMITTEE - CREATE ELECTION
-// Backend decides source = committee
+// Backend controls source + owner
 // ======================================================
 
 router.post("/committee", async (req, res) => {
   try {
+    if (req.user.panel !== "Committee") {
+      return res.status(403).json({
+        success: false,
+        error: "Committee access required.",
+      });
+    }
+
     const newElection = new Election({
       ...req.body,
 
-      // IMPORTANT
-      // Never trust frontend for source
+      // IMPORTANT:
+      // Owner comes from logged-in user, NOT frontend
+      user: req.user._id,
+
+      // Backend controls source
       source: "committee",
     });
 
@@ -136,14 +183,23 @@ router.post("/committee", async (req, res) => {
 
 // ======================================================
 // GENERATE PDF
+// User can only download an election they are allowed
+// to access. Admin can download any election.
 // ======================================================
 
 router.get("/:id/pdf", async (req, res) => {
   try {
-    const election = await Election.findById(req.params.id);
+    const election = await Election.findOne(
+      getQueryFilter(req, {
+        _id: req.params.id,
+      })
+    );
 
     if (!election) {
-      return res.status(404).send("Election not found");
+      return res.status(404).json({
+        success: false,
+        error: "Election not found.",
+      });
     }
 
     res.setHeader("Content-Type", "application/pdf");
@@ -218,9 +274,10 @@ router.get("/:id/pdf", async (req, res) => {
   } catch (error) {
     console.error("Error generating election PDF:", error);
 
-    res.status(500).send(
-      "Server Error generating election PDF"
-    );
+    res.status(500).json({
+      success: false,
+      error: "Server Error generating election PDF",
+    });
   }
 });
 

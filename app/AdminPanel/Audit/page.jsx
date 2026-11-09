@@ -82,30 +82,24 @@ const Audit = () => {
         <Header />
 
         <div className="page-container">
-          {/* Header Row with Trigger Button */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", marginBottom: "16px" }}>
-            <PageHeader title="Audit, Backup & Security" />
-
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                backgroundColor: "#10b981",
-                color: "#fff",
-                padding: "10px 18px",
-                borderRadius: "6px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "600",
-                fontSize: "14px"
-              }}
-            >
-              <Plus size={18} /> Add Audit Log
-            </button>
-          </div>
-
+            <div
+             style={{
+               display: "flex",
+               alignItems: "center",
+               width: "100%",
+               marginBottom: "16px",
+               gap: "20px",
+             }}
+           >
+             <div style={{ flex: 1, minWidth: 0 }}>
+               <PageHeader title="Audit,Backup and security" />
+             </div>
+           
+             <button className="btn-add-staff">
+               <Plus size={18} />
+               Add Audit Log
+             </button>
+             </div>
           <div className="donation-info-box">
             Every transaction timestamped with user info, audit trail, backup, password login and optional two-step authentication.
           </div>

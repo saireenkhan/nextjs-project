@@ -1,28 +1,109 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const StaffSchema = new mongoose.Schema(
+const staffSchema = new mongoose.Schema(
   {
-    staffId: { type: String, required: true, unique: true },
-    fullName: { type: String, required: true },
-    fatherName: { type: String },
-    cnic: { type: String },
-    phone: { type: String },
-    email: { type: String },
-    address: { type: String },
-    designation: { type: String, required: true },
-    education: { type: String },
-    experience: { type: String },
-    joiningDate: { type: String },
-    currentMonthlySalary: { type: Number, required: true, default: 0 },
-    previousSalary: { type: Number, default: 0 },
-    salaryIncreaseAmount: { type: Number, default: 0 },
-    salaryIncreaseDate: { type: String },
-    increaseReason: { type: String },
-    ramadanBonus: { type: Number, default: 0 },
-    bonusMonth: { type: String },
-    status: { type: String, required: true, default: "Verified" }
+    // Owner of this record
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
+      required: true,
+      index: true
+    },
+
+    staffId: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+
+    fullName: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    fatherName: {
+      type: String,
+      trim: true
+    },
+
+    cnic: {
+      type: String,
+      trim: true
+    },
+
+    phone: {
+      type: String,
+      trim: true
+    },
+
+    email: {
+      type: String,
+      trim: true
+    },
+
+    address: {
+      type: String
+    },
+
+    designation: {
+      type: String,
+      required: true
+    },
+
+    education: {
+      type: String
+    },
+
+    experience: {
+      type: String
+    },
+
+    joiningDate: {
+      type: Date
+    },
+
+    currentMonthlySalary: {
+      type: Number,
+      default: 0
+    },
+
+    previousSalary: {
+      type: Number,
+      default: 0
+    },
+
+    salaryIncreaseAmount: {
+      type: Number,
+      default: 0
+    },
+
+    salaryIncreaseDate: {
+      type: Date
+    },
+
+    salaryIncreaseReason: {
+      type: String
+    },
+
+    ramadanBonus: {
+      type: Number,
+      default: 0
+    },
+
+    month: {
+      type: String
+    },
+
+    status: {
+      type: String,
+      default: 'Active'
+    }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
-module.exports = mongoose.model("Staff", StaffSchema);
+module.exports = mongoose.model('Staff', staffSchema);

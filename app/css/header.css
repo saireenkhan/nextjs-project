@@ -26,6 +26,7 @@
 .search-container {
   position: relative;
   width: 100%;
+  
 }
 
 /* Fixed: Changed left offset from fluid 4vw to precise absolute placement */
@@ -36,6 +37,7 @@
   transform: translateY(-50%);
   color: #809DAF;
   pointer-events: none;
+    margin-left: 40px;
 }
 
 /* Fixed: Replaced margin-left with internal padding-left to balance the icon area smoothly */
@@ -49,6 +51,7 @@
   font-size: 14px;
   outline: none;
   box-sizing: border-box;
+  margin-left: 40px;
 }
 
 .header-right {

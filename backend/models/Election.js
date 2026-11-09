@@ -1,62 +1,65 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const electionSchema = new mongoose.Schema(
   {
+    // Owner of this election
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
+      required: true,
+      index: true
+    },
+
     electionId: {
       type: String,
       required: true,
-      unique: true,
+      unique: true
     },
 
-    electionTitle: {
+    title: {
       type: String,
       required: true,
+      trim: true
     },
 
-    electionType: {
+    type: {
       type: String,
-      required: true,
-      default: "General",
+      required: true
     },
 
     voteType: {
       type: String,
-      required: true,
-      default: "Single Choice",
+      required: true
     },
 
     status: {
       type: String,
-      required: true,
-      default: "Scheduled",
+      required: true
     },
 
     resultVisibility: {
-      type: String,
-      required: true,
-      default: "Public",
+      type: String
     },
 
-    // IMPORTANT:
-    // This tells us which panel created the election.
     source: {
       type: String,
-      enum: ["admin", "committee"],
-      required: true,
+      enum: ['admin', 'committee'],
+      required: true
     },
 
-    // Optional but useful for committee/admin elections
     startTime: {
-      type: String,
+      type: Date,
+      required: true
     },
 
     endTime: {
-      type: String,
-    },
+      type: Date,
+      required: true
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 
-module.exports = mongoose.model("Election", electionSchema);
+module.exports = mongoose.model('Election', electionSchema);

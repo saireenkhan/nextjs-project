@@ -1,25 +1,54 @@
 const mongoose = require('mongoose');
 
-const eventSchema = new mongoose.Schema({
-  event: { type: String, required: true },
-  date: { type: String, required: true },
-  time: { type: String, required: true },
-  speaker: { type: String, required: true },
-  topic: { type: String, required: true },
-  status: { type: String, default: 'Confirmed' },
+const eventSchema = new mongoose.Schema(
+  {
+    // Owner of this event
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
+      required: true,
+      index: true
+    },
 
-  // ==========================================
-  // BRIDGE TRACEABILITY (optional)
-  // ==========================================
-  // Set only when this Event was auto-created from an Admin
-  // "Events, Khateeb & Qari" submission (see eventKhateebRoutes.js).
-  // Left undefined for events Muqtadi creates directly — does
-  // NOT affect Muqtadi's existing create flow in any way.
-  sourceEventKhateebId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "EventKhateeb",
-    required: false,
+    event: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    date: {
+      type: Date,
+      required: true
+    },
+
+    time: {
+      type: String,
+      required: true
+    },
+
+    speaker: {
+      type: String,
+      required: true
+    },
+
+    topic: {
+      type: String,
+      required: true
+    },
+
+    status: {
+      type: String,
+      default: 'Scheduled'
+    },
+
+    sourceEventKhateebId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'EventKhateeb'
+    }
   },
-}, { timestamps: true });
+  {
+    timestamps: true
+  }
+);
 
 module.exports = mongoose.model('Event', eventSchema);

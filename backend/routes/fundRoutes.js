@@ -1,182 +1,230 @@
 const express = require("express");
 const router = express.Router();
+
 const Fund = require("../models/fund");
-const PDFDocument = require("pdfkit");
 
-// ======================================================
-// GET ACCOUNTS FUNDS
-// Accounts can ONLY see funds created by Accounts
-// ======================================================
+const { authenticate } = require("../middleware/auth");
+const { getQueryFilter } = require("../utils/queryHelper");
 
-router.get("/accounts", async (req, res) => {
-  try {
-    const funds = await Fund.find({
-      source: "accounts",
-    }).sort({ createdAt: -1 });
-
-    res.json({
-      success: true,
-      data: funds,
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      error: err.message,
-    });
-  }
-});
+router.use(authenticate);
 
 
 // ======================================================
-// GET ADMIN FUNDS
-// Admin can see BOTH Accounts + Admin funds
+// ADMIN - GET ALL FUNDS
 // ======================================================
 
 router.get("/admin", async (req, res) => {
   try {
-    const funds = await Fund.find().sort({
-      createdAt: -1,
-    });
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({
+        success: false,
+        error: "Admin access required.",
+      });
+    }
 
-    res.json({
+    const funds = await Fund.find()
+      .sort({ createdAt: -1 });
+
+    return res.json({
       success: true,
       data: funds,
     });
-  } catch (err) {
-    res.status(500).json({
+  } catch (error) {
+    console.error("Error fetching admin funds:", error);
+
+    return res.status(500).json({
       success: false,
-      error: err.message,
+      error: error.message,
     });
   }
 });
 
 
 // ======================================================
-// CREATE FUND FROM ACCOUNTS PANEL
-// ======================================================
-
-router.post("/accounts", async (req, res) => {
-  try {
-    const newFund = new Fund({
-      ...req.body,
-
-      // VERY IMPORTANT
-      // We decide the source from the endpoint,
-      // not from the frontend.
-      source: "accounts",
-    });
-
-    const savedFund = await newFund.save();
-
-    res.status(201).json({
-      success: true,
-      data: savedFund,
-    });
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-      error: err.message,
-    });
-  }
-});
-
-
-// ======================================================
-// CREATE FUND FROM ADMIN PANEL
-// ======================================================
-
-router.post("/admin", async (req, res) => {
-  try {
-    const newFund = new Fund({
-      ...req.body,
-
-      // VERY IMPORTANT
-      source: "admin",
-    });
-
-    const savedFund = await newFund.save();
-
-    res.status(201).json({
-      success: true,
-      data: savedFund,
-    });
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-      error: err.message,
-    });
-  }
-});
-
-
-// ======================================================
-// PDF / LEDGER VOUCHER
+// GET ALL FUNDS
 //
-// NOTE: both frontends now point here. Accounts previously
-// called a "/ledger" path and Admin called "/pdf" — neither
-// existed on the backend. Unified to one route, matching the
-// Expense module's convention, so both panels get a working
-// receipt/voucher.
+// Admin  -> all funds
+// Others -> only their own funds
 // ======================================================
 
-router.get("/:id/pdf", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const fund = await Fund.findById(req.params.id);
+    const filter = getQueryFilter(req);
+
+    const funds = await Fund.find(filter)
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: funds,
+    });
+  } catch (error) {
+    console.error("Error fetching funds:", error);
+
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+
+// ======================================================
+// CREATE FUND
+// Owner comes from authenticated user
+// ======================================================
+
+router.post("/", async (req, res) => {
+  try {
+    const newFund = new Fund({
+      ...req.body,
+
+      // Never trust frontend for owner
+      user: req.user._id,
+    });
+
+    const savedFund = await newFund.save();
+
+    return res.status(201).json({
+      success: true,
+      data: savedFund,
+    });
+  } catch (error) {
+    console.error("Error creating fund:", error);
+
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        error: "Duplicate fund already exists.",
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+
+// ======================================================
+// GET SINGLE FUND
+//
+// Admin  -> any fund
+// Others -> only their own fund
+// ======================================================
+
+router.get("/:id", async (req, res) => {
+  try {
+    const fund = await Fund.findOne(
+      getQueryFilter(req, {
+        _id: req.params.id,
+      })
+    );
 
     if (!fund) {
       return res.status(404).json({
         success: false,
-        error: "Fund not found",
+        error: "Fund not found.",
       });
     }
 
-    const doc = new PDFDocument();
+    return res.json({
+      success: true,
+      data: fund,
+    });
+  } catch (error) {
+    console.error("Error fetching fund:", error);
 
-    res.setHeader(
-      "Content-Type",
-      "application/pdf"
-    );
-
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=Fund-${fund._id}.pdf`
-    );
-
-    doc.pipe(res);
-
-    doc
-      .fontSize(20)
-      .text("Hisab-ul-Khair - Fund Ledger", {
-        align: "center",
-      });
-
-    doc.moveDown();
-
-    doc
-      .fontSize(12)
-      .text(`Fund Code: ${fund.fundCode || "N/A"}`);
-
-    doc.text(`Fund Name: ${fund.fundName}`);
-
-    doc.text(`Ledger Type: ${fund.ledgerType}`);
-
-    doc.text(`Opening Balance: Rs. ${fund.openingBalance}`);
-
-    doc.text(`Current Balance: Rs. ${fund.currentBalance}`);
-
-    doc.text(`Status: ${fund.status}`);
-
-    doc.text(
-      `Description: ${fund.description || "None"}`
-    );
-
-    doc.end();
-  } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      error: err.message,
+      error: error.message,
     });
   }
 });
+
+
+// ======================================================
+// UPDATE FUND
+// ======================================================
+
+router.put("/:id", async (req, res) => {
+  try {
+    const filter = getQueryFilter(req, {
+      _id: req.params.id,
+    });
+
+    const updateData = {
+      ...req.body,
+    };
+
+    // Prevent frontend from changing ownership
+    delete updateData.user;
+    delete updateData._id;
+
+    const updatedFund = await Fund.findOneAndUpdate(
+      filter,
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedFund) {
+      return res.status(404).json({
+        success: false,
+        error: "Fund not found.",
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: updatedFund,
+    });
+  } catch (error) {
+    console.error("Error updating fund:", error);
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+
+// ======================================================
+// DELETE FUND
+// ======================================================
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const filter = getQueryFilter(req, {
+      _id: req.params.id,
+    });
+
+    const deletedFund = await Fund.findOneAndDelete(filter);
+
+    if (!deletedFund) {
+      return res.status(404).json({
+        success: false,
+        error: "Fund not found.",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Fund deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting fund:", error);
+
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 
 module.exports = router;

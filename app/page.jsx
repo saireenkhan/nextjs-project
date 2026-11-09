@@ -2,8 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, RefreshCw } from "lucide-react";
-import logo from "@/public/assets/isl-logo-removebg-preview.png"
+import {
+  User,
+  RefreshCw,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+
+import logo from "@/public/assets/isl-logo-removebg-preview.png";
 import "./css/login.css";
 
 export default function Home() {
@@ -14,8 +20,11 @@ export default function Home() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [captcha, setCaptcha] = useState("");
 
+  // Password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [captcha, setCaptcha] = useState("");
   const [captchaCode, setCaptchaCode] = useState("");
 
   const [error, setError] = useState("");
@@ -38,23 +47,19 @@ export default function Home() {
      ========================================================= */
 
   const generateCaptcha = () => {
-    const characters =
-      "0123456789";
+    const characters = "0123456789";
 
     let newCaptcha = "";
 
     for (let i = 0; i < 7; i++) {
-      newCaptcha +=
-        characters.charAt(
-          Math.floor(
-            Math.random() *
-              characters.length
-          )
-        );
+      newCaptcha += characters.charAt(
+        Math.floor(
+          Math.random() * characters.length
+        )
+      );
     }
 
     setCaptchaCode(newCaptcha);
-
     setCaptcha("");
   };
 
@@ -74,7 +79,6 @@ export default function Home() {
 
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
-
     setIsOpen(false);
   };
 
@@ -98,7 +102,6 @@ export default function Home() {
       );
 
       setLoading(false);
-
       return;
     }
 
@@ -111,7 +114,6 @@ export default function Home() {
       );
 
       setLoading(false);
-
       return;
     }
 
@@ -126,13 +128,11 @@ export default function Home() {
       generateCaptcha();
 
       setLoading(false);
-
       return;
     }
 
 
     try {
-
       console.log(
         "Attempting to connect to backend..."
       );
@@ -144,8 +144,7 @@ export default function Home() {
           method: "POST",
 
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
 
           body: JSON.stringify({
@@ -162,8 +161,7 @@ export default function Home() {
       );
 
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
 
       console.log(
@@ -195,7 +193,6 @@ export default function Home() {
 
 
         const roleRoutes = {
-
           Admin:
             "/AdminPanel/Dashboard",
 
@@ -308,9 +305,7 @@ export default function Home() {
 
             <span
               className={`arrow ${
-                isOpen
-                  ? "up"
-                  : ""
+                isOpen ? "up" : ""
               }`}
             >
               ⌄
@@ -327,9 +322,7 @@ export default function Home() {
                 <li
                   key={role}
                   onClick={() =>
-                    handleRoleSelect(
-                      role
-                    )
+                    handleRoleSelect(role)
                   }
                   className={
                     selectedRole === role
@@ -368,11 +361,9 @@ export default function Home() {
               alt="Islamic Center Logo"
             />
 
-
             <h2>
               Login to Your Account
             </h2>
-
 
             <p>
               Welcome back! Please enter
@@ -409,9 +400,7 @@ export default function Home() {
                 className="edu-input"
                 value={email}
                 onChange={(e) =>
-                  setEmail(
-                    e.target.value
-                  )
+                  setEmail(e.target.value)
                 }
                 required
               />
@@ -421,20 +410,53 @@ export default function Home() {
 
             {/* PASSWORD */}
 
-            <div className="input-group">
+            <div className="input-group password-group">
 
               <input
-                type="password"
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
                 placeholder="Enter your Password"
-                className="edu-input"
+                className="edu-input password-input"
                 value={password}
                 onChange={(e) =>
-                  setPassword(
-                    e.target.value
-                  )
+                  setPassword(e.target.value)
                 }
                 required
               />
+
+
+              {/* EYE BUTTON */}
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() =>
+                  setShowPassword(
+                    !showPassword
+                  )
+                }
+                aria-label={
+                  showPassword
+                    ? "Hide password"
+                    : "Show password"
+                }
+                title={
+                  showPassword
+                    ? "Hide password"
+                    : "Show password"
+                }
+              >
+
+                {showPassword ? (
+                  <EyeOff size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
+
+              </button>
 
             </div>
 
@@ -484,6 +506,7 @@ export default function Home() {
                     generateCaptcha
                   }
                   title="Generate new captcha"
+                  aria-label="Generate new captcha"
                 >
 
                   <RefreshCw

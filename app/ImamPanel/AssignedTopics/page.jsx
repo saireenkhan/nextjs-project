@@ -76,34 +76,27 @@ const handleAddTopicRecord = async (formData) => {
 
       <div className="main-content">
         <Header />
-
-        <div className="page-container">
-          {/* Header Row with Trigger Button */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", marginBottom: "16px" }}>
-            <PageHeader title="Imam Portal" />
-
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                backgroundColor: "#10b981",
-                color: "#fff",
-                padding: "10px 18px",
-                borderRadius: "6px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "600",
-                fontSize: "14px",
-                whiteSpace: "nowrap", // Prevents text squishing/wrapping
-                flexShrink: 0         // Stops flexbox from collapsing the button
-              }}
-            >
-              <Plus size={18} /> Add Topic / Request
-            </button>
-          </div>
-
+         <div className="page-container">
+          {/* Header Row with Right-End Trigger Button */}
+           <div
+             style={{
+               display: "flex",
+               alignItems: "center",
+               width: "100%",
+               marginBottom: "16px",
+               gap: "20px",
+             }}
+           >
+             <div style={{ flex: 1, minWidth: 0 }}>
+               <PageHeader title="Assigned Topics" />
+             </div>
+           
+             <button className="btn-add-staff">
+               <Plus size={18} />
+               Add Topic
+             </button>
+             </div>
+     
           <div className="donation-info-box">
             Imam can view assigned topics from Admin and submit complaints or requests. These complaints show in Admin portal.
           </div>

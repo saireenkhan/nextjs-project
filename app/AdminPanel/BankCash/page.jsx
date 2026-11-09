@@ -79,30 +79,24 @@ const BankCash = () => {
         <Header />
 
         <div className="page-container">
-          {/* Header Row with Right-End Trigger Button */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", marginBottom: "16px" }}>
-            <PageHeader title="Bank & Cash Book" />
-
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                backgroundColor: "var(--primary-color, #10b981)",
-                color: "#fff",
-                padding: "10px 18px",
-                borderRadius: "6px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "600",
-                fontSize: "14px",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-              }}
-            >
-              <Plus size={18} /> Add New Transaction
-            </button>
-          </div>
+           <div
+             style={{
+               display: "flex",
+               alignItems: "center",
+               width: "100%",
+               marginBottom: "16px",
+               gap: "20px",
+             }}
+           >
+             <div style={{ flex: 1, minWidth: 0 }}>
+               <PageHeader title="Bank And CashBook" />
+             </div>
+           
+             <button className="btn-add-staff">
+               <Plus size={18} />
+               Add Transaction
+             </button>
+             </div>
 
           <div className="donation-info-box">
             Maintain cash-in-hand, bank balance, deposits, withdrawals and reconciliation.

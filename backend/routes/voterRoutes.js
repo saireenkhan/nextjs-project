@@ -1,154 +1,243 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Voter = require("../models/voter");
-const PDFDocument = require("pdfkit");
 
-// GET: Generate PDF / Profile
-//
-// NOTE: unified onto one route. Admin previously called
-// "/:id/pdf" and Committee previously called "/:id/profile" —
-// neither of those matched a single consistent backend route.
-// Both frontends now point here.
+const Voter = require('../models/Voter');
+const { authenticate, authorizeAdmin } = require('../middleware/auth');
+const { getQueryFilter } = require('../utils/queryHelper');
 
-router.get("/:id/pdf", async (req, res) => {
+router.use(authenticate);
+
+// ======================================================
+// ADMIN - GET ALL VOTERS
+// ======================================================
+
+router.get('/admin', authorizeAdmin, async (req, res) => {
   try {
-    const record = await Voter.findById(req.params.id);
-    if (!record) {
-      return res.status(404).send("Voter not found for PDF");
+    const voters = await Voter.find({})
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: voters,
+    });
+  } catch (error) {
+    console.error('Error fetching admin voters:', error);
+
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// ======================================================
+// ADMIN - CREATE VOTER
+// ======================================================
+
+router.post('/admin', authorizeAdmin, async (req, res) => {
+  try {
+    const voter = new Voter({
+      ...req.body,
+      user: req.user._id,
+    });
+
+    const savedVoter = await voter.save();
+
+    return res.status(201).json({
+      success: true,
+      data: savedVoter,
+    });
+  } catch (error) {
+    console.error('Error creating voter:', error);
+
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+// ======================================================
+// GET VOTERS BY COMMITTEE
+// ======================================================
+
+router.get('/committee', async (req, res) => {
+  try {
+    // Find voters where committee field exists or filter by committee
+    // You might need to adjust this based on your Voter model
+    const voters = await Voter.find({ 
+      // If you have a committee field in your Voter model
+      // committee: { $exists: true }
+      // Or if you have a specific committee ID
+      // committeeId: req.user.committeeId // If user is assigned to a committee
+    })
+    .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: voters,
+    });
+  } catch (error) {
+    console.error('Error fetching committee voters:', error);
+    
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+// ======================================================
+// GET ALL VOTERS - USER OWN DATA
+// ======================================================
+
+router.get('/', async (req, res) => {
+  try {
+    const filter = getQueryFilter(req);
+
+    const voters = await Voter.find(filter)
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: voters,
+    });
+  } catch (error) {
+    console.error('Error fetching voters:', error);
+
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// ======================================================
+// GET SINGLE VOTER
+// ======================================================
+
+router.get('/:id', async (req, res) => {
+  try {
+    const filter = getQueryFilter(req, {
+      _id: req.params.id,
+    });
+
+    const voter = await Voter.findOne(filter);
+
+    if (!voter) {
+      return res.status(404).json({
+        success: false,
+        error: 'Voter not found',
+      });
     }
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `inline; filename=voter-${record.voterId}.pdf`);
-
-    const doc = new PDFDocument({ margin: 50 });
-    doc.pipe(res);
-
-    doc.fontSize(22).fillColor("#166534").text("Hisab-Ul-Khair", { align: "center" });
-    doc.fontSize(12).fillColor("#555555").text("Voter Profile", { align: "center" });
-    doc.moveDown(2);
-
-    doc.fontSize(16).fillColor("#000000").text("Voter Summary", { underline: true });
-    doc.moveDown(1);
-
-    doc.fontSize(12).text(`Voter ID: ${record.voterId}`);
-    doc.text(`Voter Name: ${record.voterName}`);
-    doc.text(`CNIC: ${record.cnic || "N/A"}`);
-    doc.text(`Phone: ${record.phone || "N/A"}`);
-    doc.text(`Verification Method: ${record.verificationMethod || "N/A"}`);
-    doc.text(`Voting Status: ${record.votingStatus}`);
-
-    doc.moveDown(4);
-    doc.fontSize(10).fillColor("#888888").text("This is a system-generated electronic document.", { align: "center" });
-
-    doc.end();
-  } catch (error) {
-    console.error("Error generating Voter PDF:", error);
-    res.status(500).send("Server Error generating PDF");
-  }
-});
-
-
-// ======================================================
-// GET COMMITTEE VOTERS
-// Committee can ONLY see voters registered by Committee
-// ======================================================
-
-router.get("/committee", async (req, res) => {
-  try {
-    const list = await Voter.find({
-      source: "committee",
-    }).sort({ createdAt: -1 });
-
-    res.json({
+    return res.json({
       success: true,
-      data: list,
+      data: voter,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error('Error fetching voter:', error);
+
+    return res.status(500).json({
       success: false,
       error: error.message,
     });
   }
 });
 
-
 // ======================================================
-// GET ADMIN VOTERS
-// Admin can see BOTH Committee + Admin voters
+// CREATE VOTER - USER OWN DATA
 // ======================================================
 
-router.get("/admin", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const list = await Voter.find().sort({
-      createdAt: -1,
-    });
-
-    res.json({
-      success: true,
-      data: list,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-
-// ======================================================
-// CREATE VOTER FROM COMMITTEE PANEL
-// ======================================================
-
-router.post("/committee", async (req, res) => {
-  try {
-    const newRecord = new Voter({
+    const voter = new Voter({
       ...req.body,
-
-      // VERY IMPORTANT
-      // We decide the source from the endpoint,
-      // not from the frontend.
-      source: "committee",
+      user: req.user._id,
     });
 
-    const saved = await newRecord.save();
+    const savedVoter = await voter.save();
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      data: saved,
+      data: savedVoter,
     });
   } catch (error) {
-    console.error("Error saving voter:", error);
-    res.status(400).json({
+    console.error('Error creating voter:', error);
+
+    return res.status(500).json({
       success: false,
       error: error.message,
     });
   }
 });
 
-
 // ======================================================
-// CREATE VOTER FROM ADMIN PANEL
+// UPDATE VOTER
 // ======================================================
 
-router.post("/admin", async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const newRecord = new Voter({
-      ...req.body,
-
-      // VERY IMPORTANT
-      source: "admin",
+    const filter = getQueryFilter(req, {
+      _id: req.params.id,
     });
 
-    const saved = await newRecord.save();
+    const updatedVoter = await Voter.findOneAndUpdate(
+      filter,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
-    res.status(201).json({
+    if (!updatedVoter) {
+      return res.status(404).json({
+        success: false,
+        error: 'Voter not found',
+      });
+    }
+
+    return res.json({
       success: true,
-      data: saved,
+      data: updatedVoter,
     });
   } catch (error) {
-    console.error("Error saving voter:", error);
-    res.status(400).json({
+    console.error('Error updating voter:', error);
+
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// ======================================================
+// DELETE VOTER
+// ======================================================
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const filter = getQueryFilter(req, {
+      _id: req.params.id,
+    });
+
+    const deletedVoter = await Voter.findOneAndDelete(filter);
+
+    if (!deletedVoter) {
+      return res.status(404).json({
+        success: false,
+        error: 'Voter not found',
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: 'Voter deleted successfully',
+      data: deletedVoter,
+    });
+  } catch (error) {
+    console.error('Error deleting voter:', error);
+
+    return res.status(500).json({
       success: false,
       error: error.message,
     });

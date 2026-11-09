@@ -29,8 +29,12 @@ const RatingImam = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      // Fetches ONLY ratings belonging to this specific panel
-      const res = await fetch(`http://localhost:5000/api/ratings?panel=${CURRENT_PANEL}`);
+      const token = localStorage.getItem("authToken");
+      const res = await fetch(`http://localhost:5000/api/ratings?panel=${CURRENT_PANEL}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       const result = await res.json();
       const rawData = result?.data || (Array.isArray(result) ? result : []);
       setRatingList(rawData);
@@ -64,9 +68,13 @@ const RatingImam = () => {
     }
 
     try {
+      const token = localStorage.getItem("authToken");
       const res = await fetch("http://localhost:5000/api/ratings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Added Authorization Token Header
+        },
         body: JSON.stringify(payload),
       });
       const result = await res.json();
@@ -106,31 +114,35 @@ const RatingImam = () => {
       <div className="main-content">
         <Header />
 
-        <div className="page-container">
+          <div className="page-container">
           {/* Header Row with Right-End Trigger Button */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
-            <PageHeader title="Imam Panel - Ratings Management" />
+           <div
+             style={{
+               display: "flex",
+               alignItems: "center",
+               width: "100%",
+               marginBottom: "16px",
+               gap: "20px",
+             }}
+           >
+             <div style={{ flex: 1, minWidth: 0 }}>
+               <PageHeader title="Rating Management" />
+             </div>
 
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                backgroundColor: "var(--primary-color, #10b981)",
-                color: "#fff",
-                padding: "10px 18px",
-                borderRadius: "6px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "600",
-                fontSize: "14px",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-              }}
-            >
-              <Plus size={18} /> Add Rating Record
-            </button>
-          </div>
+                  <button   
+                  
+                    type="button"
+                    className="btn-add-staff"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+
+                  <Plus size={18} />
+
+                   Add Rating
+
+                  </button>
+
+                   </div>
 
           <div className="donation-info-box">
             Manage and view star rating submissions for the Imam panel.

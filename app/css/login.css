@@ -825,7 +825,73 @@ body {
 
   transform: none;
 }
+/* ==========================================================================
+   PASSWORD FIELD
+   ========================================================================== */
 
+.password-group {
+  width: 100%;
+  position: relative;
+}
+
+
+.password-input {
+  padding-right: 48px;
+}
+
+
+/* Eye button */
+
+.password-toggle {
+  position: absolute;
+
+  right: 12px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  background: transparent;
+
+  color: #809DAF;
+
+  cursor: pointer;
+
+  padding: 0;
+
+  border-radius: 6px;
+
+  transition: all 0.2s ease;
+}
+
+
+.password-toggle:hover {
+  color: #3D5F74;
+
+  background-color: #DBE5EB;
+}
+
+
+.password-toggle:focus {
+  outline: none;
+
+  color: #1E3A4C;
+
+  background-color: #DBE5EB;
+}
+
+
+.password-toggle svg {
+  pointer-events: none;
+}
 
 /* ==========================================================================
    15. FOOTER

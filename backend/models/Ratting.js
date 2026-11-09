@@ -1,41 +1,54 @@
 const mongoose = require('mongoose');
 
-const ratingSchema = new mongoose.Schema({
-  ratingId: {
-    type: String,
-    required: true,
-    unique: true
+const ratingSchema = new mongoose.Schema(
+  {
+    // Owner of this record
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
+      required: true,
+      index: true
+    },
+
+    ratingId: {
+      type: String,
+      required: true,
+      unique: true
+    },
+
+    panel: {
+      type: String,
+      default: 'muqtadi'
+    },
+
+    personType: {
+      type: String,
+      required: true
+    },
+
+    personName: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    averageRating: {
+      type: Number,
+      default: 0
+    },
+
+    feedbackBy: {
+      type: String
+    },
+
+    date: {
+      type: Date,
+      default: Date.now
+    }
   },
-  panel: {
-    type: String,
-    required: true,
-    default: "muqtadi" // Tracks which panel created this record
-  },
-  personType: {
-    type: String,
-    required: true,
-    default: "Imam"
-  },
-  personName: {
-    type: String,
-    required: true
-  },
-  averageRating: {
-    type: String,
-    required: true,
-    default: "5.0"
-  },
-  feedbackBy: {
-    type: String,
-    required: true,
-    default: "Anonymous"
-  },
-  date: {
-    type: String,
-    required: true
+  {
+    timestamps: true
   }
-}, {
-  timestamps: true
-});
+);
 
 module.exports = mongoose.model('Rating', ratingSchema);

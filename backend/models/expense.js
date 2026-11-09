@@ -1,84 +1,78 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const ExpenseSchema = new mongoose.Schema({
-   panel: {
+const expenseSchema = new mongoose.Schema(
+  {
+    // Owner of this record
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
+      required: true,
+      index: true
+    },
+
+    panel: {
+      type: String,
+      enum: [
+        'admin',
+        'accounts',
+        'controller',
+        'imam',
+        'muqtadi',
+        'moazzin'
+      ],
+      required: true
+    },
+
+    vendor: {
       type: String,
       required: true,
-      enum: [
-        "admin",
-        "accounts",
-        "controller",
-        "imam",
-        "muqtadi",
-        "moazzin",
-      ],
-      default: "accounts",
+      trim: true
     },
-    
-  vendor: {
-    type: String,
-    required: true,
-  },
 
-  expenseType: {
-    type: String,
-    enum: [
-      "Electricity",
-      "Water",
-      "Cleaning",
-      "Staff Salary",
-      "Staff salary",
-      "Sadaqah Fund",
-      "Maintenance",
-      "Utility Bills",
-      "hadia",
-      "Ramzan Bonus",
-      "Other",
-    ],
-    required: true,
-  },
+    expenseType: {
+      type: String,
+      required: true
+    },
 
-  fundCategory: {
-    type: String,
-    required: true,
-  },
+    fundCategory: {
+      type: String,
+      required: true
+    },
 
-  amount: {
-    type: Number,
-    required: true,
-  },
+    amount: {
+      type: Number,
+      required: true
+    },
 
-  expenseDate: {
-    type: String,
-  },
+    expenseDate: {
+      type: Date,
+      required: true
+    },
 
-  receiptNumber: {
-    type: String,
-    unique: true,
-  },
+    receiptNumber: {
+      type: String,
+      required: true,
+      unique: true
+    },
 
-  status: {
-    type: String,
-    default: "Completed",
-  },
+    status: {
+      type: String,
+      default: 'Completed'
+    },
 
-  notes: {
-    type: String,
-  },
+    notes: {
+      type: String
+    },
 
-  // ==========================================
-  // WHERE THIS EXPENSE WAS CREATED
-  // ==========================================
-  source: {
-    type: String,
-    enum: ["accounts", "admin"],
-    required: true,
+    source: {
+      type: String,
+      enum: ['accounts', 'admin'],
+      required: true
+    }
   },
+  {
+    timestamps: true
+  }
+);
 
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-module.exports = mongoose.model("Expense", ExpenseSchema);
+module.exports = mongoose.model('Expense', expenseSchema);

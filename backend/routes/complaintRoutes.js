@@ -1,168 +1,356 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Complaint = require('../models/Complaint');
 
-// GET report/PDF (kept as-is — already worked for Admin; Committee's
-// "/detail" and Moazzin's "/details" and Muqtadi's "/export" never
-// matched a real route, so all four now point here)
-router.get('/:id/pdf', async (req, res) => {
-  try {
-    const complaint = await Complaint.findById(req.params.id);
-    if (!complaint) {
-      return res.status(404).json({ success: false, error: "Complaint record not found" });
-    }
-    return res.send(`Generating PDF report for Complaint ID: ${complaint.complaintId}`);
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
-});
+const Complaint = require("../models/Complaint");
+const { authenticate } = require("../middleware/auth");
+const { getQueryFilter } = require("../utils/queryHelper");
+
+// ======================================================
+// AUTHENTICATION
+// ======================================================
+
+router.use(authenticate);
 
 
 // ======================================================
 // GET ADMIN COMPLAINTS
-// Admin can see ALL complaints — Committee, Moazzin, Muqtadi
+// Admin can see ALL users' complaints
 // ======================================================
 
-router.get('/admin', async (req, res) => {
+router.get("/admin", async (req, res) => {
   try {
-    const complaints = await Complaint.find().sort({ createdAt: -1 });
-    return res.json({ success: true, data: complaints });
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({
+        success: false,
+        error: "Admin access required.",
+      });
+    }
+
+    const complaints = await Complaint.find()
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: complaints,
+    });
   } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
 
 // ======================================================
 // GET COMMITTEE COMPLAINTS
-// Committee can ONLY see complaints filed by Committee
+// Each Committee user sees ONLY their own complaints
 // ======================================================
 
-router.get('/committee', async (req, res) => {
+router.get("/committee", async (req, res) => {
   try {
-    const complaints = await Complaint.find({ source: "committee" }).sort({ createdAt: -1 });
-    return res.json({ success: true, data: complaints });
+    if (
+      req.user.role !== "Admin" &&
+      req.user.panel !== "Committee"
+    ) {
+      return res.status(403).json({
+        success: false,
+        error: "Committee access required.",
+      });
+    }
+
+    const complaints = await Complaint.find(
+      getQueryFilter(req, {
+        source: "committee",
+      })
+    ).sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: complaints,
+    });
   } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
 
 // ======================================================
 // GET MOAZZIN COMPLAINTS
-// Moazzin can ONLY see complaints filed by Moazzin
+// Each Moazzin user sees ONLY their own complaints
 // ======================================================
 
-router.get('/moazzin', async (req, res) => {
+router.get("/moazzin", async (req, res) => {
   try {
-    const complaints = await Complaint.find({ source: "moazzin" }).sort({ createdAt: -1 });
-    return res.json({ success: true, data: complaints });
+    if (
+      req.user.role !== "Admin" &&
+      req.user.panel !== "Moazzin"
+    ) {
+      return res.status(403).json({
+        success: false,
+        error: "Moazzin access required.",
+      });
+    }
+
+    const complaints = await Complaint.find(
+      getQueryFilter(req, {
+        source: "moazzin",
+      })
+    ).sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: complaints,
+    });
   } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
 
 // ======================================================
 // GET MUQTADI COMPLAINTS
-// Muqtadi can ONLY see complaints filed by Muqtadi
+// Each Muqtadi user sees ONLY their own complaints
 // ======================================================
 
-router.get('/muqtadi', async (req, res) => {
+router.get("/muqtadi", async (req, res) => {
   try {
-    const complaints = await Complaint.find({ source: "muqtadi" }).sort({ createdAt: -1 });
-    return res.json({ success: true, data: complaints });
+    if (
+      req.user.role !== "Admin" &&
+      req.user.panel !== "Muqtadi"
+    ) {
+      return res.status(403).json({
+        success: false,
+        error: "Muqtadi access required.",
+      });
+    }
+
+    const complaints = await Complaint.find(
+      getQueryFilter(req, {
+        source: "muqtadi",
+      })
+    ).sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: complaints,
+    });
   } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
 
 // ======================================================
-// CREATE COMPLAINT FROM ADMIN PANEL
+// CREATE COMPLAINT — ADMIN
 // ======================================================
 
-router.post('/admin', async (req, res) => {
+router.post("/admin", async (req, res) => {
   try {
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({
+        success: false,
+        error: "Admin access required.",
+      });
+    }
+
     const newComplaint = new Complaint({
       ...req.body,
 
-      // VERY IMPORTANT
-      // We decide the source from the endpoint,
-      // not from the frontend.
+      // Ownership is ALWAYS decided by the backend
+      user: req.user._id,
+
+      // Source is decided by the endpoint
       source: "admin",
     });
+
     const savedComplaint = await newComplaint.save();
-    return res.status(201).json({ success: true, data: savedComplaint });
+
+    return res.status(201).json({
+      success: true,
+      data: savedComplaint,
+    });
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ success: false, error: "Duplicate Complaint ID already exists." });
+      return res.status(400).json({
+        success: false,
+        error: "Duplicate Complaint ID already exists.",
+      });
     }
-    return res.status(400).json({ success: false, error: error.message });
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
 
 // ======================================================
-// CREATE COMPLAINT FROM COMMITTEE PANEL
+// CREATE COMPLAINT — COMMITTEE
 // ======================================================
 
-router.post('/committee', async (req, res) => {
+router.post("/committee", async (req, res) => {
   try {
-    const newComplaint = new Complaint({
+    if (req.user.panel !== "Committee") {
+      return res.status(403).json({
+        success: false,
+        error: "Committee access required.",
+      });
+    }
+
+    const complaint = new Complaint({
       ...req.body,
+      user: req.user._id,
       source: "committee",
     });
-    const savedComplaint = await newComplaint.save();
-    return res.status(201).json({ success: true, data: savedComplaint });
+
+    const savedComplaint = await complaint.save();
+
+    return res.status(201).json({
+      success: true,
+      data: savedComplaint,
+    });
   } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ success: false, error: "Duplicate Complaint ID already exists." });
-    }
-    return res.status(400).json({ success: false, error: error.message });
+    console.error("Error creating Committee complaint:", error);
+
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
-
 // ======================================================
-// CREATE COMPLAINT FROM MOAZZIN PANEL
+// CREATE COMPLAINT — MOAZZIN
 // ======================================================
 
-router.post('/moazzin', async (req, res) => {
+router.post("/moazzin", async (req, res) => {
   try {
+    if (
+      req.user.role !== "Admin" &&
+      req.user.panel !== "Moazzin"
+    ) {
+      return res.status(403).json({
+        success: false,
+        error: "Moazzin access required.",
+      });
+    }
+
     const newComplaint = new Complaint({
       ...req.body,
+
+      user: req.user._id,
       source: "moazzin",
     });
+
     const savedComplaint = await newComplaint.save();
-    return res.status(201).json({ success: true, data: savedComplaint });
+
+    return res.status(201).json({
+      success: true,
+      data: savedComplaint,
+    });
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ success: false, error: "Duplicate Complaint ID already exists." });
+      return res.status(400).json({
+        success: false,
+        error: "Duplicate Complaint ID already exists.",
+      });
     }
-    return res.status(400).json({ success: false, error: error.message });
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
 
 // ======================================================
-// CREATE COMPLAINT FROM MUQTADI PANEL
+// CREATE COMPLAINT — MUQTADI
 // ======================================================
 
-router.post('/muqtadi', async (req, res) => {
+router.post("/muqtadi", async (req, res) => {
   try {
+    if (
+      req.user.role !== "Admin" &&
+      req.user.panel !== "Muqtadi"
+    ) {
+      return res.status(403).json({
+        success: false,
+        error: "Muqtadi access required.",
+      });
+    }
+
     const newComplaint = new Complaint({
       ...req.body,
+
+      user: req.user._id,
       source: "muqtadi",
     });
+
     const savedComplaint = await newComplaint.save();
-    return res.status(201).json({ success: true, data: savedComplaint });
+
+    return res.status(201).json({
+      success: true,
+      data: savedComplaint,
+    });
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ success: false, error: "Duplicate Complaint ID already exists." });
+      return res.status(400).json({
+        success: false,
+        error: "Duplicate Complaint ID already exists.",
+      });
     }
-    return res.status(400).json({ success: false, error: error.message });
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
+
+
+// ======================================================
+// GET COMPLAINT PDF
+// User can access ONLY their own complaint
+// Admin can access any complaint
+// ======================================================
+
+router.get("/:id/pdf", async (req, res) => {
+  try {
+    const complaint = await Complaint.findOne(
+      getQueryFilter(req, {
+        _id: req.params.id,
+      })
+    );
+
+    if (!complaint) {
+      return res.status(404).json({
+        success: false,
+        error: "Complaint record not found",
+      });
+    }
+
+    return res.send(
+      `Generating PDF report for Complaint ID: ${complaint.complaintId}`
+    );
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 
 module.exports = router;

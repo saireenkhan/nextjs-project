@@ -1,64 +1,60 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const FundSchema = new mongoose.Schema({
+const fundSchema = new mongoose.Schema(
+  {
+    // Owner of this record
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
+      required: true,
+      index: true
+    },
 
-  fundCode: {
-    type: String,
-    required: true,
-    unique: true,
+    fundCode: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+
+    fundName: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    openingBalance: {
+      type: Number,
+      default: 0
+    },
+
+    currentBalance: {
+      type: Number,
+      default: 0
+    },
+
+    ledgerType: {
+      type: String
+    },
+
+    status: {
+      type: String,
+      default: 'Active'
+    },
+
+    description: {
+      type: String
+    },
+
+    source: {
+      type: String,
+      enum: ['accounts', 'admin'],
+      required: true
+    }
   },
+  {
+    timestamps: true
+  }
+);
 
-  fundName: {
-    type: String,
-    required: true,
-  },
-
-  openingBalance: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-
-  currentBalance: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-
-  // NOTE: left as a free-text String (no enum) on purpose —
-  // Accounts panel uses "General Ledger" as a default, Admin
-  // panel uses "Asset" / "Liability" / "Income" / "Expense".
-  // Restricting this would break one panel or the other.
-  ledgerType: {
-    type: String,
-    required: true,
-  },
-
-  // NOTE: also free-text — Accounts uses "Active"/"Inactive",
-  // Admin uses "Verified"/"Pending". Same reasoning as Expense's
-  // status field, which has no enum either.
-  status: {
-    type: String,
-    default: "Active",
-  },
-
-  description: {
-    type: String,
-  },
-
-  // ==========================================
-  // WHERE THIS FUND RECORD WAS CREATED
-  // ==========================================
-  source: {
-    type: String,
-    enum: ["accounts", "admin"],
-    required: true,
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-module.exports = mongoose.model("Fund", FundSchema);
+module.exports = mongoose.model('Fund', fundSchema);

@@ -11,6 +11,7 @@ import AddClassForm from "@/components/AddClassForm";
 import ModalWrapper from "@/components/ModalWrapper";
 
 import { CandidatesFormSchema } from "@/Data/DataCommittee";
+import { authorizedRequest } from "@/utils/api";
 
 import "../../css/Pages.css";
 
@@ -24,7 +25,6 @@ const Candidate2 = () => {
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("All");
 
   // ==========================================================
-  // IMPORTANT
   // Committee panel identifier
   // ==========================================================
 
@@ -42,57 +42,26 @@ const Candidate2 = () => {
     setLoading(true);
 
     try {
-
-      // IMPORTANT:
-      // The backend scopes candidates by PATH, not a query param:
-      //   GET /api/candidates/committee -> only Committee-added
-      //   GET /api/candidates/admin     -> all candidates
-      //
-      // There is no GET /api/candidates (no root route), so calling
-      // that would 404 and return an HTML page instead of JSON.
-
-      const response = await fetch(
-        `http://localhost:5000/api/candidates/${CURRENT_PANEL}`
+      const result = await authorizedRequest(
+        "/candidates/committee"
       );
 
-      const contentType =
-        response.headers.get("content-type") || "";
-
-      if (!response.ok || !contentType.includes("application/json")) {
-
-        const rawText = await response.text();
-
-        console.error(
-          "Candidates API did not return JSON. Status:",
-          response.status,
-          "Body:",
-          rawText.slice(0, 200)
-        );
-
-        throw new Error(
-          `Candidates API returned ${response.status} (non-JSON response). Check candidateRoutes.js.`
-        );
-
-      }
-
-      const result = await response.json();
-
-      const data =
-        result?.data ||
-        (Array.isArray(result) ? result : []);
+      const data = Array.isArray(result)
+        ? result
+        : result?.success
+        ? result.data || []
+        : [];
 
       setCandidatesList(data);
-
     } catch (error) {
-
-      console.error("Failed to fetch Committee candidates:", error);
+      console.error(
+        "Failed to fetch Committee candidates:",
+        error
+      );
 
       setCandidatesList([]);
-
     } finally {
-
       setLoading(false);
-
     }
   };
 
@@ -101,15 +70,7 @@ const Candidate2 = () => {
   // ==========================================================
 
   const handleAddCandidate = async (formData) => {
-
     const payload = {
-
-      // NOTE:
-      // We do NOT send a "source" field here. The backend sets
-      // it automatically based on which endpoint we POST to
-      // (/api/candidates/committee marks the record as
-      // Committee-added).
-
       candidateId:
         formData?.candidateId ||
         formData?.["Candidate ID"] ||
@@ -132,8 +93,8 @@ const Candidate2 = () => {
 
       totalVotes: Number(
         formData?.totalVotes ||
-        formData?.["Total Votes"] ||
-        0
+          formData?.["Total Votes"] ||
+          0
       ),
 
       votePercentage:
@@ -149,84 +110,88 @@ const Candidate2 = () => {
     };
 
     try {
-
-      const response = await fetch(
-        `http://localhost:5000/api/candidates/${CURRENT_PANEL}`,
+      const result = await authorizedRequest(
+        `/candidates/${CURRENT_PANEL}`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify(payload),
         }
       );
 
-      const contentType =
-        response.headers.get("content-type") || "";
-
-      if (!response.ok || !contentType.includes("application/json")) {
-
-        const rawText = await response.text();
-
-        console.error(
-          "Candidates API did not return JSON. Status:",
-          response.status,
-          "Body:",
-          rawText.slice(0, 200)
-        );
-
-        throw new Error(
-          `Candidates API returned ${response.status} (non-JSON response). Check candidateRoutes.js.`
-        );
-
-      }
-
-      const result = await response.json();
-
       if (result.success) {
-
         alert("Candidate added successfully!");
 
         setIsModalOpen(false);
 
-        loadCandidates();
-
+        await loadCandidates();
       } else {
-
-        alert("Error saving candidate: " + (result.error || "Unknown error"));
-
+        alert(
+          "Error saving candidate: " +
+            (result.error || "Unknown error")
+        );
       }
-
     } catch (error) {
+      console.error(
+        "Candidate submission error:",
+        error
+      );
 
-      console.error("Candidate submission error:", error);
-
-      alert("Failed to connect to server.");
-
+      alert(
+        error?.message ||
+          "Failed to connect to server."
+      );
     }
   };
 
+  // ==========================================================
+  // VIEW CANDIDATE PDF
+  // ==========================================================
+
   const handleViewCandidate = (id) => {
-    // NOTE: unified onto the one PDF/export route the backend
-    // actually exposes — there is no separate "/profile" route.
-    window.open(`http://localhost:5000/api/candidates/${id}/pdf`, "_blank");
+    window.open(
+      `http://localhost:5000/api/candidates/${id}/pdf`,
+      "_blank"
+    );
   };
 
-  // Filter & Search Logic
-  const filteredCandidates = candidatesList.filter((item) => {
-    const matchesSearch = 
-      !searchQuery || 
-      (item.candidateName && item.candidateName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.candidateId && item.candidateId.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.position && item.position.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.election && item.election.toLowerCase().includes(searchQuery.toLowerCase()));
+  // ==========================================================
+  // FILTER & SEARCH LOGIC
+  // ==========================================================
 
-    const matchesStatus = 
-      selectedStatusFilter === "All" || 
-      (item.status && item.status.toLowerCase() === selectedStatusFilter.toLowerCase());
+  const filteredCandidates = candidatesList.filter((item) => {
+    const search = searchQuery.toLowerCase();
+
+    const matchesSearch =
+      !searchQuery ||
+      (item.candidateName &&
+        item.candidateName
+          .toLowerCase()
+          .includes(search)) ||
+      (item.candidateId &&
+        item.candidateId
+          .toLowerCase()
+          .includes(search)) ||
+      (item.position &&
+        item.position
+          .toLowerCase()
+          .includes(search)) ||
+      (item.election &&
+        item.election
+          .toLowerCase()
+          .includes(search));
+
+    const matchesStatus =
+      selectedStatusFilter === "All" ||
+      (item.status &&
+        item.status.toLowerCase() ===
+          selectedStatusFilter.toLowerCase());
 
     return matchesSearch && matchesStatus;
   });
+
+  // ==========================================================
+  // PAGE UI
+  // ==========================================================
 
   return (
     <div className="campus-layout">
@@ -236,64 +201,103 @@ const Candidate2 = () => {
         <Header />
 
         <div className="page-container">
-          {/* Header Row with Trigger Button */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", marginBottom: "16px" }}>
-            <PageHeader title="Committee Panel - Candidate Management" />
 
-            <button 
-              onClick={() => setIsModalOpen(true)}
+          {/* Header Row with Trigger Button */}
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              marginBottom: "16px",
+              gap: "20px",
+            }}
+          >
+            <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                backgroundColor: "#10b981",
-                color: "#fff",
-                padding: "10px 18px",
-                borderRadius: "6px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "600",
-                fontSize: "14px",
-                whiteSpace: "nowrap",
-                flexShrink: 0
+                flex: 1,
+                minWidth: 0,
               }}
             >
-              <Plus size={18} /> Add Candidate
+              <PageHeader title="Candidate Management" />
+            </div>
+
+            <button
+              type="button"
+              className="btn-add-staff"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <Plus size={18} />
+              Add Candidate
             </button>
           </div>
 
+          {/* Information Box */}
+
           <div className="donation-info-box">
-            Committee panel: Add candidate profiles, assign them to
-            elections and track voting performance with vote counts
-            and percentages. These records are automatically visible
-            in the Admin master panel.
+            Committee panel: Add candidate profiles, assign
+            them to elections and track voting performance
+            with vote counts and percentages. These records
+            are automatically visible in the Admin master
+            panel.
           </div>
 
           {/* Search & Status Filters */}
+
           <div className="filters-row">
-            <div className="search-box" style={{ position: 'relative' }}>
-              <Search size={18} style={{ position: 'absolute', left: '14px', top: '12px', color: '#555' }} />
-              <input 
-                type="text" 
-                placeholder="Search Candidate ID, Name, Position..." 
+            <div
+              className="search-box"
+              style={{
+                position: "relative",
+              }}
+            >
+              <Search
+                size={18}
+                style={{
+                  position: "absolute",
+                  left: "14px",
+                  top: "12px",
+                  color: "#555",
+                }}
+              />
+
+              <input
+                type="text"
+                placeholder="Search Candidate ID, Name, Position..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ paddingLeft: '40px' }} 
+                onChange={(e) =>
+                  setSearchQuery(e.target.value)
+                }
+                style={{
+                  paddingLeft: "40px",
+                }}
               />
             </div>
 
-            <select 
+            <select
               className="filter-select"
               value={selectedStatusFilter}
-              onChange={(e) => setSelectedStatusFilter(e.target.value)}
+              onChange={(e) =>
+                setSelectedStatusFilter(e.target.value)
+              }
             >
               <option value="All">All Statuses</option>
-              <option value="Nominated">Nominated</option>
-              <option value="Leading">Leading</option>
-              <option value="Winner">Winner</option>
-              <option value="Disqualified">Disqualified</option>
+              <option value="Nominated">
+                Nominated
+              </option>
+              <option value="Leading">
+                Leading
+              </option>
+              <option value="Winner">
+                Winner
+              </option>
+              <option value="Disqualified">
+                Disqualified
+              </option>
             </select>
           </div>
+
+          {/* Candidates Table */}
 
           <DataTable
             headers={[
@@ -310,34 +314,60 @@ const Candidate2 = () => {
           >
             {loading ? (
               <tr>
-                <td colSpan="9" style={{ textAlign: "center", padding: "20px" }}>
+                <td
+                  colSpan="9"
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                  }}
+                >
                   Loading database records...
                 </td>
               </tr>
             ) : filteredCandidates.length === 0 ? (
               <tr>
-                <td colSpan="9" style={{ textAlign: "center", padding: "20px" }}>
+                <td
+                  colSpan="9"
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                  }}
+                >
                   No candidate records found.
                 </td>
               </tr>
             ) : (
               filteredCandidates.map((item, index) => (
                 <tr key={item._id || index}>
-                  <td>{item.id || index + 1}</td>
-
                   <td>
-                    <strong>{item.candidateId}</strong>
+                    {item.id || index + 1}
                   </td>
 
-                  <td>{item.candidateName}</td>
+                  <td>
+                    <strong>
+                      {item.candidateId || "-"}
+                    </strong>
+                  </td>
 
-                  <td>{item.position}</td>
+                  <td>
+                    {item.candidateName || "-"}
+                  </td>
 
-                  <td>{item.election}</td>
+                  <td>
+                    {item.position || "-"}
+                  </td>
 
-                  <td>{item.totalVotes}</td>
+                  <td>
+                    {item.election || "-"}
+                  </td>
 
-                  <td>{item.votePercentage}</td>
+                  <td>
+                    {item.totalVotes ?? 0}
+                  </td>
+
+                  <td>
+                    {item.votePercentage || "0%"}
+                  </td>
 
                   <td>
                     <span
@@ -347,31 +377,37 @@ const Candidate2 = () => {
                         background:
                           item.status === "Winner"
                             ? "#dcfce7"
-                            : item.status === "Leading"
+                            : item.status ===
+                              "Leading"
                             ? "#dbeafe"
-                            : item.status === "Disqualified"
+                            : item.status ===
+                              "Disqualified"
                             ? "#fee2e2"
                             : "#fef3c7",
                         color:
                           item.status === "Winner"
                             ? "#166534"
-                            : item.status === "Leading"
+                            : item.status ===
+                              "Leading"
                             ? "#1d4ed8"
-                            : item.status === "Disqualified"
+                            : item.status ===
+                              "Disqualified"
                             ? "#991b1b"
                             : "#92400e",
                         fontSize: "12px",
                         fontWeight: "600",
                       }}
                     >
-                      {item.status}
+                      {item.status || "Nominated"}
                     </span>
                   </td>
 
                   <td>
                     <button
                       type="button"
-                      onClick={() => handleViewCandidate(item._id)}
+                      onClick={() =>
+                        handleViewCandidate(item._id)
+                      }
                       style={{
                         display: "inline-flex",
                         alignItems: "center",
@@ -397,12 +433,16 @@ const Candidate2 = () => {
       </div>
 
       {/* Modal Wrapper for Form */}
-      <ModalWrapper 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+
+      <ModalWrapper
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         title="Add Candidate Profile"
       >
-        <AddClassForm fields={CandidatesFormSchema} onSubmit={handleAddCandidate} />
+        <AddClassForm
+          fields={CandidatesFormSchema}
+          onSubmit={handleAddCandidate}
+        />
       </ModalWrapper>
     </div>
   );

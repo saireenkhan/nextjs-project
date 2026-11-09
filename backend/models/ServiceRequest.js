@@ -1,14 +1,15 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const enforceDataIsolation = require('../middleware/dataIsolation');
 
-const ServiceRequestSchema = new mongoose.Schema({
+const serviceRequestSchema = new mongoose.Schema({
   requestId: { type: String, required: true, unique: true },
-  requestType: { type: String, required: true }, // e.g., Nikah, Janazah, Dua, etc.
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRole', required: true },
+  requestType: { type: String, required: true },
   requesterName: { type: String, required: true },
-  phone: { type: String, required: true },
-  requiredDate: { type: String, required: true },
-  priority: { type: String, enum: ["Low", "Medium", "High", "Urgent"], default: "Medium" },
-  status: { type: String, enum: ["Submitted", "Under Review", "Approved", "Rejected"], default: "Submitted" },
-  description: { type: String },
+  status: { type: String, default: 'Pending' }
 }, { timestamps: true });
 
-module.exports = mongoose.model("ServiceRequest", ServiceRequestSchema);
+// Attach central isolation rule
+serviceRequestSchema.plugin(enforceDataIsolation);
+
+module.exports = mongoose.model('ServiceRequest', serviceRequestSchema);
