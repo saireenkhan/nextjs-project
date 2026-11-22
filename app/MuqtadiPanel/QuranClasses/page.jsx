@@ -89,7 +89,7 @@ const handleAddClass = async (formData) => {
   };
   
   const handleExportClassPDF = (id) => {
-    window.open(`http://localhost:5000/api/quran-classes/${id}/export`, "_blank");
+    window.open(`/api/quran-classes/${id}/export`, "_blank");
   };
 
   const filteredClasses = classesList.filter((item) => {

@@ -35,7 +35,7 @@ const Ratings = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/ratings");
+      const res = await fetch("/api/ratings");
       const result = await res.json();
       const data = result?.data || (Array.isArray(result) ? result : []);
       
@@ -83,7 +83,7 @@ const Ratings = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/ratings", {
+      const res = await fetch("/api/ratings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -104,7 +104,7 @@ const Ratings = () => {
   };
 
   const handleExportPDF = (id) => {
-    window.open(`http://localhost:5000/api/ratings/${id}/export`, "_blank");
+    window.open(`/api/ratings/${id}/export`, "_blank");
   };
 
   const filteredRatings = ratingList.filter((item) => {

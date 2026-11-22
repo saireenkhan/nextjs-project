@@ -59,7 +59,7 @@ const BankCash = () => {
   };
 
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/bank-cash/${id}/pdf`, "_blank");
+    window.open(`/api/bank-cash/${id}/pdf`, "_blank");
   };
 
   const filteredData = dataList.filter((item) => {
@@ -92,7 +92,7 @@ const BankCash = () => {
                <PageHeader title="Bank And CashBook" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Transaction
              </button>

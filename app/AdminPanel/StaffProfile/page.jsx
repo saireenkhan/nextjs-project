@@ -74,7 +74,7 @@ const StaffProfile = () => {
   };
 
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/staff/${id}/pdf`, "_blank");
+    window.open(`/api/staff/${id}/pdf`, "_blank");
   };
 
   // Filtering & Searching Logic
@@ -113,7 +113,7 @@ const StaffProfile = () => {
                <PageHeader title="Staff Profile Mangement" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Staff
              </button>

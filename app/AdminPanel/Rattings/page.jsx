@@ -68,7 +68,7 @@ const Rattings = () => {
   };
 
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/ratings/${id}/pdf`, "_blank");
+    window.open(`/api/ratings/${id}/pdf`, "_blank");
   };
 
   // Filtering and Searching Logic
@@ -108,7 +108,7 @@ const Rattings = () => {
                <PageHeader title="Rating Management" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Rating
              </button>

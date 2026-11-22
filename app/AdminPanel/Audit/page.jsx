@@ -56,7 +56,7 @@ const Audit = () => {
   };
 
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/audits/${id}/pdf`, "_blank");
+    window.open(`/api/audits/${id}/pdf`, "_blank");
   };
 
   // Filter & Search Logic
@@ -95,7 +95,7 @@ const Audit = () => {
                <PageHeader title="Audit,Backup and security" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Audit Log
              </button>

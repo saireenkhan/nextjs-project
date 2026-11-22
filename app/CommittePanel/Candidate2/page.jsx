@@ -149,7 +149,7 @@ const Candidate2 = () => {
 
   const handleViewCandidate = (id) => {
     window.open(
-      `http://localhost:5000/api/candidates/${id}/pdf`,
+      `/api/candidates/${id}/pdf`,
       "_blank"
     );
   };

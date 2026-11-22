@@ -58,7 +58,7 @@ const handleAddCandidate = async (formData) => {
   }
 };
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/candidates/${id}/pdf`, "_blank");
+    window.open(`/api/candidates/${id}/pdf`, "_blank");
   };
 
   // Filtering and Searching Logic
@@ -98,7 +98,7 @@ const handleAddCandidate = async (formData) => {
                <PageHeader title="Candidate Management" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Candidate
              </button>

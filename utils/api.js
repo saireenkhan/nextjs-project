@@ -2,7 +2,7 @@ export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   (process.env.NODE_ENV === 'production'
     ? '/api'
-    : 'http://localhost:5002/api');
+    : '/api');
 
 // ==================== AUTH HELPERS ====================
 

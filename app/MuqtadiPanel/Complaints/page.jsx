@@ -55,7 +55,7 @@ const Complaints = () => {
       // that would 404 and return an HTML page instead of JSON.
 
       const res = await fetch(
-        `http://localhost:5000/api/complaints/${CURRENT_PANEL}`
+        `/api/complaints/${CURRENT_PANEL}`
       );
 
       const contentType =
@@ -183,7 +183,7 @@ const Complaints = () => {
     try {
 
       const res = await fetch(
-        `http://localhost:5000/api/complaints/${CURRENT_PANEL}`,
+        `/api/complaints/${CURRENT_PANEL}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -233,7 +233,7 @@ const Complaints = () => {
   const handleExportPDF = (id) => {
     // NOTE: unified onto the one PDF/report route the backend
     // actually exposes — there is no separate "/export" route.
-    window.open(`http://localhost:5000/api/complaints/${id}/pdf`, "_blank");
+    window.open(`/api/complaints/${id}/pdf`, "_blank");
   };
 
   const filteredComplaints = complaintList.filter((item) => {

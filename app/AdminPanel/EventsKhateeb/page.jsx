@@ -66,7 +66,7 @@ const EventsKhateeb = () => {
   };
 
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/events-khateeb/${id}/pdf`, "_blank");
+    window.open(`/api/events-khateeb/${id}/pdf`, "_blank");
   };
 
   const filteredData = dataList.filter((item) => {
@@ -100,7 +100,7 @@ const EventsKhateeb = () => {
                <PageHeader title="Events & khateeb Management" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Events
              </button>

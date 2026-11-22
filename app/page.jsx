@@ -139,7 +139,7 @@ export default function Home() {
 
 
       const response = await fetch(
-        "http://127.0.0.1:5000/api/auth/login",
+       `${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/login`,
         {
           method: "POST",
 
@@ -386,6 +386,7 @@ export default function Home() {
 
           <form
             className="edu-form"
+            autoComplete="off"
             onSubmit={handleLogin}
           >
 
@@ -396,6 +397,8 @@ export default function Home() {
 
               <input
                 type="email"
+                name="hisab-login-username"
+                autoComplete="off"
                 placeholder="Enter your Email"
                 className="edu-input"
                 value={email}
@@ -419,6 +422,8 @@ export default function Home() {
                     : "password"
                 }
                 placeholder="Enter your Password"
+                name="hisab-login-password"
+                autoComplete="new-password"
                 className="edu-input password-input"
                 value={password}
                 onChange={(e) =>

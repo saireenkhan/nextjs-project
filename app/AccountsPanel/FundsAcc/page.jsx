@@ -52,7 +52,7 @@ const FundsAcc = () => {
       // that would 404 and return an HTML page instead of JSON.
 
       const response = await fetch(
-        `http://localhost:5000/api/funds/${CURRENT_PANEL}`
+        `/api/funds/${CURRENT_PANEL}`
       );
 
       const contentType =
@@ -146,7 +146,7 @@ const FundsAcc = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:5000/api/funds/${CURRENT_PANEL}`,
+        `/api/funds/${CURRENT_PANEL}`,
         {
           method: "POST",
           headers: {
@@ -205,7 +205,7 @@ const FundsAcc = () => {
   const handleViewLedger = (id) => {
     // NOTE: unified with Admin's PDF endpoint — the backend only
     // exposes /api/funds/:id/pdf, there is no separate /ledger route.
-    window.open(`http://localhost:5000/api/funds/${id}/pdf`, "_blank");
+    window.open(`/api/funds/${id}/pdf`, "_blank");
   };
 
   // Filter & Search Logic

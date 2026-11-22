@@ -133,7 +133,7 @@ const UpcomingEvents = () => {
   };
 
   const handleExportEventPDF = (id) => {
-    window.open(`http://localhost:5000/api/events/${id}/export`, "_blank");
+    window.open(`/api/events/${id}/export`, "_blank");
   };
 
   const filteredEvents = eventsList.filter((item) => {

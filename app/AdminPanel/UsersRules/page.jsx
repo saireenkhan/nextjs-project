@@ -130,7 +130,7 @@ const UsersRules = () => {
   };
 
   const handleDownloadPdf = (user) => {
-    window.open(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/users-roles/${user._id}/pdf`, "_blank");
+    window.open(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/users-roles/${user._id}/pdf`, "_blank");
   };
 
   const canManageUsers = currentUser?.role === 'Admin' || currentUser?.permissions?.canManageUsers;
@@ -160,7 +160,7 @@ const UsersRules = () => {
                <PageHeader title="User & Roles" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add User
              </button>

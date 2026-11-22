@@ -156,7 +156,7 @@ const Election2 = () => {
   const handleViewPdf = (id) => {
 
     window.open(
-      `http://localhost:5000/api/elections/${id}/pdf`,
+      `/api/elections/${id}/pdf`,
       "_blank"
     );
   };
@@ -237,7 +237,7 @@ const Election2 = () => {
     <PageHeader title="Election Management" />
   </div>
 
-  <button className="btn-add-staff">
+  <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
     <Plus size={18} />
     Add Election
   </button>

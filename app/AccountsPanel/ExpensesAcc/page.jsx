@@ -65,7 +65,7 @@ const ExpensesAcc = () => {
       // that would 404 and return an HTML page instead of JSON.
 
       const response = await fetch(
-        `http://localhost:5000/api/expenses/${CURRENT_PANEL}`
+        `/api/expenses/${CURRENT_PANEL}`
       );
 
       // IMPORTANT:
@@ -196,7 +196,7 @@ const ExpensesAcc = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:5000/api/expenses/${CURRENT_PANEL}`,
+        `/api/expenses/${CURRENT_PANEL}`,
         {
           method: "POST",
 
@@ -281,7 +281,7 @@ const ExpensesAcc = () => {
   ) => {
 
     window.open(
-      `http://localhost:5000/api/expenses/${id}/pdf`,
+      `/api/expenses/${id}/pdf`,
       "_blank"
     );
   };

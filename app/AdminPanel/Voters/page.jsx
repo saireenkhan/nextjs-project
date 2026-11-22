@@ -59,7 +59,7 @@ const Voters = () => {
   };
 
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/voters/${id}/pdf`, "_blank");
+    window.open(`/api/voters/${id}/pdf`, "_blank");
   };
 
   // Filtering and Searching Logic
@@ -99,7 +99,7 @@ const Voters = () => {
                <PageHeader title="Voter Management" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Voter
              </button>

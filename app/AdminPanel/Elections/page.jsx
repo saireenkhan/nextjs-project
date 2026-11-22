@@ -152,7 +152,7 @@ const Elections = () => {
   const handleViewPdf = (id) => {
 
     window.open(
-      `http://localhost:5000/api/elections/${id}/pdf`,
+      `/api/elections/${id}/pdf`,
       "_blank"
     );
   };

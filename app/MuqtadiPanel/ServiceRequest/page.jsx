@@ -77,7 +77,7 @@ const ServiceRequest = () => {
   };
 
   const handleExportPDF = (id) => {
-    window.open(`http://localhost:5000/api/service-requests/${id}/export`, "_blank");
+    window.open(`/api/service-requests/${id}/export`, "_blank");
   };
 
   const filteredRequests = requestList.filter((item) => {

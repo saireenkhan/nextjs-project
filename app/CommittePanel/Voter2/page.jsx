@@ -136,7 +136,7 @@ const Voter2 = () => {
 
   const handleViewVoter = (id) => {
     window.open(
-      `http://localhost:5000/api/voters/${id}/pdf`,
+      `/api/voters/${id}/pdf`,
       "_blank"
     );
   };

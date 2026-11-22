@@ -57,9 +57,11 @@ const DonationManagement = () => {
       // No panel query here.
       // Admin receives ALL donations.
 
-      const res = await fetch(
-        "http://localhost:5000/api/donations"
-      );
+      const res = await fetch("/api/donations", {
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  },
+});
 
       const result = await res.json();
 
@@ -154,11 +156,12 @@ const DonationManagement = () => {
     try {
 
       const res = await fetch(
-        "http://localhost:5000/api/donations",
+        "/api/donations",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
           body: JSON.stringify(payload),
         }
@@ -208,7 +211,7 @@ const DonationManagement = () => {
   const handleDownloadPdf = (id) => {
 
     window.open(
-      `http://localhost:5000/api/donations/${id}/pdf`,
+      `/api/donations/${id}/pdf`,
       "_blank"
     );
   };
@@ -313,7 +316,7 @@ const DonationManagement = () => {
                <PageHeader title="Donation Management" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Donation
              </button>

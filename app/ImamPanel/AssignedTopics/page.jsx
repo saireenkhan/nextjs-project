@@ -91,7 +91,7 @@ const handleAddTopicRecord = async (formData) => {
                <PageHeader title="Assigned Topics" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Topic
              </button>

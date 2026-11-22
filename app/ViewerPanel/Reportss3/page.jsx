@@ -60,7 +60,7 @@ const Reportss3 = () => {
   };
 
   const handleExportReport = (id) => {
-    window.open(`http://localhost:5000/api/reports/${id}/download`, "_blank");
+    window.open(`/api/reports/${id}/download`, "_blank");
   };
 
   // Filter & Search Logic

@@ -319,7 +319,7 @@ const Expenses = () => {
 
   const handleDownloadPdf = (id) => {
     window.open(
-      `http://localhost:5000/api/expenses/${id}/pdf`,
+      `/api/expenses/${id}/pdf`,
       "_blank"
     );
   };
@@ -405,7 +405,7 @@ const Expenses = () => {
                <PageHeader title="Expenses Management" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Expense
              </button>

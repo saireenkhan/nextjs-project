@@ -52,7 +52,7 @@ const ComplainMoz = () => {
       // that would 404 and return an HTML page instead of JSON.
 
       const response = await fetch(
-        `http://localhost:5000/api/complaints/${CURRENT_PANEL}`
+        `/api/complaints/${CURRENT_PANEL}`
       );
 
       const contentType =
@@ -156,7 +156,7 @@ const ComplainMoz = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:5000/api/complaints/${CURRENT_PANEL}`,
+        `/api/complaints/${CURRENT_PANEL}`,
         {
           method: "POST",
           headers: {
@@ -214,7 +214,7 @@ const ComplainMoz = () => {
   const handleViewComplaint = (id) => {
     // NOTE: unified onto the one PDF/report route the backend
     // actually exposes — there is no separate "/details" route.
-    window.open(`http://localhost:5000/api/complaints/${id}/pdf`, "_blank");
+    window.open(`/api/complaints/${id}/pdf`, "_blank");
   };
 
   // Filter & Search Logic

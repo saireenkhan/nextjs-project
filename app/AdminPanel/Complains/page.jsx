@@ -56,7 +56,7 @@ const Complains = () => {
   };
 
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/complaints/${id}/pdf`, "_blank");
+    window.open(`/api/complaints/${id}/pdf`, "_blank");
   };
 
   // Filter & Search Logic
@@ -96,7 +96,7 @@ const Complains = () => {
                <PageHeader title="Complaints System" />
              </div>
            
-             <button className="btn-add-staff">
+             <button type="button" onClick={() => setIsModalOpen(true)} className="btn-add-staff">
                <Plus size={18} />
                Add Complaint
              </button>

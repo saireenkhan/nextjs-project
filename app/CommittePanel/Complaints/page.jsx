@@ -155,7 +155,7 @@ const Complaints = () => {
 
   const handleViewComplaint = (id) => {
     window.open(
-      `http://localhost:5000/api/complaints/${id}/pdf`,
+      `/api/complaints/${id}/pdf`,
       "_blank"
     );
   };

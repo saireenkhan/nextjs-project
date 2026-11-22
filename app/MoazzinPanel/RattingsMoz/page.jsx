@@ -81,7 +81,7 @@ const RatingsMoz = () => {
   };
 
   const handleViewRating = (id) => {
-    window.open(`http://localhost:5000/api/ratings/${id}/details`, "_blank");
+    window.open(`/api/ratings/${id}/details`, "_blank");
   };
 
   // Filter & Search Logic

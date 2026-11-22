@@ -61,7 +61,7 @@ const Reportss = () => {
   };
 
   const handleDownloadPdf = (id) => {
-    window.open(`http://localhost:5000/api/reports/${id}/pdf`, "_blank");
+    window.open(`/api/reports/${id}/pdf`, "_blank");
   };
 
   // Filtering and Searching Logic

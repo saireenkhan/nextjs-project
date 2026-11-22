@@ -1,19 +1,18 @@
-const jwt = require('jsonwebtoken');
+﻿const jwt = require('jsonwebtoken');
 const UserRole = require('../models/UserRole');
 
-// ===============================
-// AUTHENTICATION
-// ===============================
 const authenticate = async (req, res, next) => {
   try {
-    let token;
+    const header = req.headers.authorization || '';
 
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer ')
-    ) {
-      token = req.headers.authorization.split(' ')[1];
+    if (!header.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: 'Access denied. No token provided.'
+      });
     }
+
+    const token = header.slice(7).trim();
 
     if (!token) {
       return res.status(401).json({
@@ -22,45 +21,46 @@ const authenticate = async (req, res, next) => {
       });
     }
 
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({
+        success: false,
+        error: 'JWT secret is not configured.'
+      });
+    }
+
+    let decoded;
+
     try {
-      const decoded = jwt.verify(
-        token,
-        process.env.JWT_SECRET || 'your-secret-key'
-      );
-
-      const user = await UserRole.findById(decoded.id);
-
-      if (!user) {
-        return res.status(401).json({
-          success: false,
-          error: 'Invalid token. User not found.'
-        });
-      }
-
-      if (user.status !== 'Active') {
-        return res.status(403).json({
-          success: false,
-          error: 'Account is not active.'
-        });
-      }
-
-      // IMPORTANT
-      // The complete logged-in user is available everywhere
-      req.user = user;
-      req.token = token;
-
-      next();
-
-    } catch (error) {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
       return res.status(401).json({
         success: false,
         error: 'Invalid or expired token.'
       });
     }
 
-  } catch (error) {
-    console.error('Authentication error:', error);
+    const user = await UserRole.findById(decoded.id);
 
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: 'User not found.'
+      });
+    }
+
+    if (user.status !== 'Active') {
+      return res.status(403).json({
+        success: false,
+        error: 'Account is not active.'
+      });
+    }
+
+    req.user = user;
+    req.token = token;
+
+    return next();
+  } catch (error) {
+    console.error('Authentication error:', error.message);
     return res.status(500).json({
       success: false,
       error: 'Authentication failed.'
@@ -68,65 +68,43 @@ const authenticate = async (req, res, next) => {
   }
 };
 
+const authorize = (...roles) => (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      error: 'User not authenticated.'
+    });
+  }
 
-// ===============================
-// ROLE AUTHORIZATION
-// ===============================
-const authorize = (...roles) => {
-  return (req, res, next) => {
+  if (!roles.includes(req.user.role)) {
+    return res.status(403).json({
+      success: false,
+      error: 'Role not authorized.'
+    });
+  }
 
-    if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        error: 'User not authenticated.'
-      });
-    }
-
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
-        success: false,
-        error: `Role ${req.user.role} is not authorized.`
-      });
-    }
-
-    next();
-  };
+  next();
 };
 
+const authorizePermission = (permission) => (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      error: 'User not authenticated.'
+    });
+  }
 
-// ===============================
-// PERMISSION AUTHORIZATION
-// ===============================
-const authorizePermission = (permission) => {
-  return (req, res, next) => {
+  if (!req.user.permissions?.[permission]) {
+    return res.status(403).json({
+      success: false,
+      error: 'Permission denied.'
+    });
+  }
 
-    if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        error: 'User not authenticated.'
-      });
-    }
-
-    if (
-      !req.user.permissions ||
-      !req.user.permissions[permission]
-    ) {
-      return res.status(403).json({
-        success: false,
-        error: `You don't have ${permission} permission.`
-      });
-    }
-
-    next();
-  };
+  next();
 };
 
-
-// ===============================
-// ADMIN ONLY
-// ===============================
 const authorizeAdmin = (req, res, next) => {
-
   if (!req.user) {
     return res.status(401).json({
       success: false,
@@ -143,7 +121,6 @@ const authorizeAdmin = (req, res, next) => {
 
   next();
 };
-
 
 module.exports = {
   authenticate,

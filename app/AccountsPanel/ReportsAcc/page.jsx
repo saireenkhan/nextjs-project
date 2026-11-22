@@ -62,7 +62,7 @@ const ReportsAcc = () => {
   };
 
   const handleExportReport = (id, format) => {
-    window.open(`http://localhost:5000/api/reports/${id}/export?format=${format || 'pdf'}`, "_blank");
+    window.open(`/api/reports/${id}/export?format=${format || 'pdf'}`, "_blank");
   };
 
   // Filter & Search Logic

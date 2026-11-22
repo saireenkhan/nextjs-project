@@ -63,7 +63,7 @@ const Donations = () => {
       // donations created by Accounts.
 
       const response = await fetch(
-        `http://localhost:5000/api/donations?panel=${CURRENT_PANEL}`
+        `/api/donations?panel=${CURRENT_PANEL}`
       );
 
       const result =
@@ -178,7 +178,7 @@ const Donations = () => {
     try {
 
       const response = await fetch(
-        "http://localhost:5000/api/donations",
+        "/api/donations",
         {
           method: "POST",
 
@@ -243,7 +243,7 @@ const Donations = () => {
   ) => {
 
     window.open(
-      `http://localhost:5000/api/donations/${id}/pdf`,
+      `/api/donations/${id}/pdf`,
       "_blank"
     );
   };

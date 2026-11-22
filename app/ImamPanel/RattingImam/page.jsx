@@ -30,7 +30,7 @@ const RatingImam = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("authToken");
-      const res = await fetch(`http://localhost:5000/api/ratings?panel=${CURRENT_PANEL}`, {
+      const res = await fetch(`/api/ratings?panel=${CURRENT_PANEL}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -69,7 +69,7 @@ const RatingImam = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-      const res = await fetch("http://localhost:5000/api/ratings", {
+      const res = await fetch("/api/ratings", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -235,7 +235,7 @@ const RatingImam = () => {
                   <td>
                     <button
                       type="button"
-                      onClick={() => window.open(`http://localhost:5000/api/ratings/${item._id}/export`, "_blank")}
+                      onClick={() => window.open(`/api/ratings/${item._id}/export`, "_blank")}
                       style={{
                         display: "inline-flex",
                         alignItems: "center",
